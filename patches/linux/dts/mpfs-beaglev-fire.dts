@@ -296,14 +296,6 @@
 //&mmuart3 //{
 //	statu//s = "okay";
 //};//
-//
-//&mmuart4 {
-//	status = "okay";
-//};
-
-//&pcie {
-//	status = "okay";
-//};
 
 &qspi {
 	status = "okay";
@@ -374,4 +366,14 @@
 	dma-noncoherent;
 	status = "okay";
 	dr_mode = "otg";
+};
+
+// UARTs
+bone_uart_4: &mmuart4 {
+	symlink = "bone/uart/4";
+};
+
+// I2Cs 
+bone_i2c_2: &i2c0 {
+	symlink = "bone/i2c/2";
 };
