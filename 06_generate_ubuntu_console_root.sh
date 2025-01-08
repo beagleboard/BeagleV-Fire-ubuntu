@@ -75,6 +75,9 @@ cp -v ./ignore/.root/etc/bbb.io/templates/nginx/nginx-autoindex ./ignore/.root/e
 cp -v ./ignore/.root/etc/bbb.io/templates/nginx/*.html ./ignore/.root/var/www/html/
 rm -f ./ignore/.root/var/www/html/index.nginx-debian.html || true
 
+#Ubuntu Lunar is eol, switch to old-release for testing...
+sed -i -e 's:ports.ubuntu.com:old-releases.ubuntu.com/ubuntu:g' ./ignore/.root/etc//apt/sources.list
+
 if [ -f ./deploy/.modules ] ; then
 	version=$(cat ./deploy/.modules || true)
 	if [ -f ./deploy/${version}-modules.tar.gz ] ; then
