@@ -2,7 +2,11 @@ image: robertcnelson/beagle-devscripts-kernel-debian-12-amd64:latest
 # https://openbeagle.org/beagleboard/ci-docker-images
 
 before_script:
-  - apt-get update -q
+  - export PATH=/usr/lib/ccache:$PATH
+  - echo "Acquire::http::Proxy \"http://192.168.1.10:3142\";" > /etc/apt/apt.conf.d/00aptproxy
+  - apt-get update
+  - apt-get upgrade -yq
+  - apt-get dist-upgrade -yq
   - apt-get install -yq bc bison bmap-tools cpio debhelper dosfstools flex genimage kmod libelf-dev libssl-dev libyaml-dev lz4 mtools
 
 variables:
@@ -10,7 +14,7 @@ variables:
   CACHE_COMPRESSION_LEVEL: "fast"
 
 cache:
-  key: "$CI_PROJECT_NAME"
+  key: "$CI_PROJECT_NAME-v6.1.x-Beagle"
   paths:
     - mirror/x86_64-gcc-*-linux.tar.xz
     - ccache.tar.lz4
@@ -25,11 +29,12 @@ build:
     - ./02_build_hss.sh
     - ./03_build_u-boot.sh
     - mkdir -p /root/.cache/ccache/ || true
-    - time tar --use-compress-program=lz4 -xf ccache.tar.lz4 -C / || true
-    - ccache -s
+    - tar --use-compress-program=lz4 -xf ccache.tar.lz4 -C / || true
+    - ccache -M 1G
+    - ccache -z
     - ./04_build_linux.sh
-    - ccache -s
-    - time tar --use-compress-program=lz4 -cf ccache.tar.lz4 /root/.cache/ccache/
+    - ccache -sv
+    - tar --use-compress-program=lz4 -cf ccache.tar.lz4 /root/.cache/ccache/
     - ./05_generate_payload.bin.sh
     - ./06_generate_ubuntu_console_root.sh
     - ./07_create_sdcard_img.sh
@@ -39,7 +44,7 @@ build:
     - cp -v deploy/images/sdcard.bmap ./deploy/
   artifacts:
     expire_in: 28 days
-    name: "$CI_PROJECT_NAME-$CI_JOB_ID"
+    name: "$CI_PROJECT_NAME-v6.1.x-Beagle-$CI_JOB_ID"
     paths:
       - "deploy/sdcard.img.xz"
       - "deploy/sdcard.bmap"
