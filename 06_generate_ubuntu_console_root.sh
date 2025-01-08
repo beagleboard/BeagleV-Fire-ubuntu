@@ -11,16 +11,16 @@ wdir=`pwd`
 if [ -f /tmp/latest ] ; then
 	rm -rf /tmp/latest | true
 fi
-wget --quiet --directory-prefix=/tmp/ https://rcn-ee.net/rootfs/ubuntu-riscv64-23.04-minimal/latest || true
+wget --quiet --directory-prefix=/tmp/ https://rcn-ee.net/rootfs/ubuntu-riscv64-24.04-minimal/latest || true
 if [ -f /tmp/latest ] ; then
 	latest_rootfs=$(cat "/tmp/latest")
 	datestamp=$(cat "/tmp/latest" | awk -F 'riscv64-' '{print $2}' | awk -F '.' '{print $1}')
 
-	if [ ! -f ./deploy/ubuntu-23.04-console-riscv64-${datestamp}/riscv64-rootfs-ubuntu-lunar.tar ] ; then
+	if [ ! -f ./deploy/ubuntu-24.04-console-riscv64-${datestamp}/riscv64-rootfs-ubuntu-noble.tar ] ; then
 		if [ -f ./.gitlab-runner ] ; then
-			wget -c --directory-prefix=./deploy http://192.168.1.98/mirror/rcn-ee.us/rootfs/ubuntu-riscv64-23.04-minimal/${datestamp}/${latest_rootfs}
+			wget -c --directory-prefix=./deploy http://192.168.1.98/mirror/rcn-ee.us/rootfs/ubuntu-riscv64-24.04-minimal/${datestamp}/${latest_rootfs}
 		else
-			wget -c --directory-prefix=./deploy https://rcn-ee.net/rootfs/ubuntu-riscv64-23.04-minimal/${datestamp}/${latest_rootfs}
+			wget -c --directory-prefix=./deploy https://rcn-ee.net/rootfs/ubuntu-riscv64-24.04-minimal/${datestamp}/${latest_rootfs}
 		fi
 		cd ./deploy/
 		tar xf ${latest_rootfs}
@@ -36,8 +36,8 @@ if [ -d ./ignore/.root ] ; then
 fi
 mkdir -p ./ignore/.root
 
-echo "Extracting: ubuntu-23.04-console-riscv64-${datestamp}/riscv64-rootfs-ubuntu-lunar.tar"
-tar xfp ./deploy/ubuntu-23.04-console-riscv64-${datestamp}/riscv64-rootfs-ubuntu-lunar.tar -C ./ignore/.root
+echo "Extracting: ubuntu-24.04-console-riscv64-${datestamp}/riscv64-rootfs-ubuntu-noble.tar"
+tar xfp ./deploy/ubuntu-24.04-console-riscv64-${datestamp}/riscv64-rootfs-ubuntu-noble.tar -C ./ignore/.root
 sync
 
 mkdir -p ./deploy/input/ || true
@@ -74,9 +74,6 @@ rm -f ./ignore/.root/etc/nginx/sites-enabled/default || true
 cp -v ./ignore/.root/etc/bbb.io/templates/nginx/nginx-autoindex ./ignore/.root/etc/nginx/sites-enabled/default
 cp -v ./ignore/.root/etc/bbb.io/templates/nginx/*.html ./ignore/.root/var/www/html/
 rm -f ./ignore/.root/var/www/html/index.nginx-debian.html || true
-
-#Ubuntu Lunar is eol, switch to old-release for testing...
-sed -i -e 's:ports.ubuntu.com:old-releases.ubuntu.com/ubuntu:g' ./ignore/.root/etc//apt/sources.list
 
 if [ -f ./deploy/.modules ] ; then
 	version=$(cat ./deploy/.modules || true)
