@@ -7,24 +7,33 @@ if ! id | grep -q root; then
 fi
 
 wdir=`pwd`
+distro="debian"
+version="trixie"
+codename="trixie"
 
 if [ -f /tmp/latest ] ; then
 	rm -rf /tmp/latest | true
 fi
-wget --quiet --directory-prefix=/tmp/ https://rcn-ee.net/rootfs/debian-riscv64-trixie-minimal/latest || true
+wget --quiet --directory-prefix=/tmp/ https://rcn-ee.net/rootfs/${distro}-riscv64-${version}-minimal/latest || true
 if [ -f /tmp/latest ] ; then
 	latest_rootfs=$(cat "/tmp/latest")
 	datestamp=$(cat "/tmp/latest" | awk -F 'riscv64-' '{print $2}' | awk -F '.' '{print $1}')
+	echo "${datestamp}"
 
-	if [ ! -f ./deploy/debian-trixie-console-riscv64-${datestamp}/riscv64-rootfs-debian-trixie.tar ] ; then
+	if [ ! -f ./deploy/${distro}-${version}-console-riscv64-${datestamp}/riscv64-rootfs-${distro}-${codename}.tar ] ; then
+		echo "wget [${datestamp}/${latest_rootfs}]"
 		if [ -f ./.gitlab-runner ] ; then
-			wget -c --quiet --directory-prefix=./deploy http://192.168.1.98/mirror/rcn-ee.us/rootfs/debian-riscv64-trixie-minimal/${datestamp}/${latest_rootfs}
+			wget -c --quiet --directory-prefix=./deploy http://192.168.1.98/mirror/rcn-ee.us/rootfs/${distro}-riscv64-${version}-minimal/${datestamp}/${latest_rootfs}
 		else
-			wget -c --directory-prefix=./deploy https://rcn-ee.net/rootfs/debian-riscv64-trixie-minimal/${datestamp}/${latest_rootfs}
+			wget -c --directory-prefix=./deploy https://rcn-ee.net/rootfs/${distro}-riscv64-${version}-minimal/${datestamp}/${latest_rootfs}
 		fi
 		cd ./deploy/
 		tar xf ${latest_rootfs}
 		cd ../
+		if [ ! -f ./deploy/${distro}-${version}-console-riscv64-${datestamp}/riscv64-rootfs-${distro}-${codename}.tar ] ; then
+			echo "Corrupted file?"
+			exit 2
+		fi
 	fi
 else
 	echo "Failure: getting image"
@@ -36,8 +45,8 @@ if [ -d ./ignore/.root ] ; then
 fi
 mkdir -p ./ignore/.root
 
-echo "Extracting: debian-trixie-console-riscv64-${datestamp}/riscv64-rootfs-*.tar"
-tar xfp ./deploy/debian-trixie-console-riscv64-${datestamp}/riscv64-rootfs-*.tar -C ./ignore/.root
+echo "Extracting: ${distro}-${version}-console-riscv64-${datestamp}/riscv64-rootfs-${distro}-${codename}.tar"
+tar xfp ./deploy/${distro}-${version}-console-riscv64-${datestamp}/riscv64-rootfs-${distro}-${codename}.tar -C ./ignore/.root
 sync
 
 mkdir -p ./deploy/input/ || true
@@ -93,3 +102,4 @@ mkfs.ext4 -F ./deploy/input/root.ext4 -d ./ignore/.root
 if [ -f ./.06_generate_root.sh ] ; then
 	rm -f ./.06_generate_root.sh || true
 fi
+#
