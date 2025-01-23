@@ -75,6 +75,10 @@ if [ -f arch/riscv/configs/mpfs_defconfig ] ; then
 
 	./scripts/config --enable CONFIG_SENSORS_TVS_MPFS
 
+	./scripts/config --enable CONFIG_FW_LOADER_COMPRESS
+	./scripts/config --enable CONFIG_FW_LOADER_COMPRESS_XZ
+	./scripts/config --enable CONFIG_FW_LOADER_COMPRESS_ZSTD
+
 	echo "make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} olddefconfig"
 	make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} olddefconfig
 else
