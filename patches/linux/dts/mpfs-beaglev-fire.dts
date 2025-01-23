@@ -132,7 +132,7 @@
 	sd_card_cs {
 		gpio-hog;
 		gpios = <12 12>;
-		output_high;
+		output-high;
 		line-name = "SD_CARD_CS";
 	};
 };
@@ -184,7 +184,7 @@
 	vio_enable {
 		gpio-hog;
 		gpios = <30 30>;
-		output_high;
+		output-high;
 		line-name = "VIO_ENABLE";
 	};
 
