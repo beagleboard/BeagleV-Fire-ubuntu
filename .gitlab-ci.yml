@@ -4,6 +4,9 @@ before_script:
   - apt-get update
   - apt-get dist-upgrade -yq
   - apt-get install -yq bc bison bmap-tools cpio debhelper dosfstools flex genimage kmod libelf-dev libssl-dev libyaml-dev lz4 mtools
+  - git config --global user.email "$GITLAB_USER_EMAIL"
+  - git config --global user.name "$GITLAB_USER_NAME"
+  - touch .gitlab-runner
 
 build-v6.1-debian-13-riscv64:
   image: robertcnelson/beagle-devscripts-kernel-debian-12-amd64:latest
@@ -17,9 +20,6 @@ build-v6.1-debian-13-riscv64:
     - docker-amd64
   stage: build
   script:
-    - git config --global user.email "$GITLAB_USER_EMAIL"
-    - git config --global user.name "$GITLAB_USER_NAME"
-    - touch .gitlab-runner
     - ./01_git_sync.sh
     - ./02_build_hss.sh
     - ./03_build_u-boot.sh
@@ -30,6 +30,7 @@ build-v6.1-debian-13-riscv64:
     - ./04_build_linux.sh
     - ccache -sv
     - tar --use-compress-program=lz4 -cf ccache.tar.lz4 /root/.cache/ccache/
+    - du -sh ccache.tar.lz4
     - ./05_generate_payload.bin.sh
     - ./06_generate_debian_console_root.sh
     - ./07_create_sdcard_img.sh
@@ -38,6 +39,7 @@ build-v6.1-debian-13-riscv64:
     - cp -v deploy/images/sdcard.img.xz ./deploy/
     - cp -v deploy/images/sdcard.bmap ./deploy/
   artifacts:
+    when: on_success
     expire_in: 28 days
     name: "$CI_PROJECT_NAME-v6.1-debian-13-riscv64-$CI_JOB_ID"
     paths:
@@ -57,9 +59,6 @@ build-v6.1-ubuntu-2404-riscv64:
     - docker-amd64
   stage: build
   script:
-    - git config --global user.email "$GITLAB_USER_EMAIL"
-    - git config --global user.name "$GITLAB_USER_NAME"
-    - touch .gitlab-runner
     - ./01_git_sync.sh
     - ./02_build_hss.sh
     - ./03_build_u-boot.sh
@@ -70,6 +69,7 @@ build-v6.1-ubuntu-2404-riscv64:
     - ./04_build_linux.sh
     - ccache -sv
     - tar --use-compress-program=lz4 -cf ccache.tar.lz4 /root/.cache/ccache/
+    - du -sh ccache.tar.lz4
     - ./05_generate_payload.bin.sh
     - ./06_generate_ubuntu_console_root.sh
     - ./07_create_sdcard_img.sh
@@ -78,6 +78,7 @@ build-v6.1-ubuntu-2404-riscv64:
     - cp -v deploy/images/sdcard.img.xz ./deploy/
     - cp -v deploy/images/sdcard.bmap ./deploy/
   artifacts:
+    when: on_success
     expire_in: 28 days
     name: "$CI_PROJECT_NAME-v6.1-ubuntu-2404-riscv64-$CI_JOB_ID"
     paths:
