@@ -1,9 +1,5 @@
 before_script:
   - export PATH=/usr/lib/ccache:$PATH
-  - echo "Acquire::http::Proxy \"http://192.168.1.10:3142\";" > /etc/apt/apt.conf.d/00aptproxy
-  - apt-get update
-  - apt-get dist-upgrade -yq
-  - apt-get install -yq bc bison bmap-tools cpio debhelper dosfstools flex genimage kmod libelf-dev libssl-dev libyaml-dev lz4 mtools
   - git config --global user.email "$GITLAB_USER_EMAIL"
   - git config --global user.name "$GITLAB_USER_NAME"
   - touch .gitlab-runner
@@ -40,7 +36,7 @@ build-v6.1-debian-13-riscv64:
     - cp -v deploy/images/sdcard.bmap ./deploy/
   artifacts:
     when: on_success
-    expire_in: 28 days
+    expire_in: 1 week
     name: "$CI_PROJECT_NAME-v6.1-debian-13-riscv64-$CI_JOB_ID"
     paths:
       - "deploy/sdcard.img.xz"
@@ -79,7 +75,7 @@ build-v6.1-ubuntu-2404-riscv64:
     - cp -v deploy/images/sdcard.bmap ./deploy/
   artifacts:
     when: on_success
-    expire_in: 28 days
+    expire_in: 1 week
     name: "$CI_PROJECT_NAME-v6.1-ubuntu-2404-riscv64-$CI_JOB_ID"
     paths:
       - "deploy/sdcard.img.xz"
