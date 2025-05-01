@@ -79,6 +79,10 @@ if [ -f arch/riscv/configs/mpfs_defconfig ] ; then
 	./scripts/config --enable CONFIG_FW_LOADER_COMPRESS_XZ
 	./scripts/config --enable CONFIG_FW_LOADER_COMPRESS_ZSTD
 
+	#Bump the number of default uarts allowed
+	./scripts/config --set-val CONFIG_SERIAL_8250_NR_UARTS 8
+	./scripts/config --set-val CONFIG_SERIAL_8250_RUNTIME_UARTS 8
+
 	echo "make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} olddefconfig"
 	make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} olddefconfig
 else
@@ -163,6 +167,10 @@ else
 	echo "make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} olddefconfig"
 	make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} olddefconfig
 fi
+
+#echo "make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} menuconfig"
+#make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} menuconfig
+#exit 2
 
 echo "make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} Image modules dtbs"
 make -j${CORES} ARCH=riscv CROSS_COMPILE="ccache ${CC}" Image modules dtbs
