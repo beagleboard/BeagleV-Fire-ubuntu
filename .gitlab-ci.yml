@@ -1,8 +1,9 @@
 before_script:
   - export PATH=/usr/lib/ccache:$PATH
+  - touch .gitlab-runner
   - git config --global user.email "$GITLAB_USER_EMAIL"
   - git config --global user.name "$GITLAB_USER_NAME"
-  - touch .gitlab-runner
+  - git config --global advice.detachedHead false
 
 build-v6.1-debian-13-riscv64:
   image: robertcnelson/beagle-devscripts-kernel-debian-12-amd64:latest
