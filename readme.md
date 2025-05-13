@@ -1,8 +1,20 @@
+# Weekly BUILDS for Debian 13 (trixie) and Ubuntu 24.04 (noble)
+
+https://gitlab.com/RobertCNelson/beaglev-fire-ubuntu/-/artifacts
+
+# Mirrors:
+
+Main Mirror: https://github.com/beagleboard/BeagleV-Fire-ubuntu
+
+Builds on every commit: https://openbeagle.org/beaglev-fire/BeagleV-Fire-ubuntu
+
+Daily CI Builds: https://gitlab.com/RobertCNelson/beaglev-fire-ubuntu
+
 # Build Depends
 
 ```
-sudo apt update
-sudo apt install bmap-tools dosfstools genimage libyaml-dev mtools
+sudo apt update ;\
+sudo apt-get install -y bison bmap-tools dosfstools genimage flex libelf-dev libyaml-dev mtools
 ```
 
 # Building Microchip Linux tree
