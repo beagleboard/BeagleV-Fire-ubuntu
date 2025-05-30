@@ -38,7 +38,7 @@ build-v6.1-debian-13-riscv64:
     - cp -v deploy/images/sdcard.bmap ./deploy/
   artifacts:
     when: on_success
-    expire_in: 1 week
+    expire_in: 4 week
     name: "$CI_PROJECT_NAME-v6.1-debian-13-riscv64-$CI_JOB_ID"
     paths:
       - "deploy/sdcard.img.xz"
@@ -78,7 +78,7 @@ build-v6.1-ubuntu-2404-riscv64:
     - cp -v deploy/images/sdcard.bmap ./deploy/
   artifacts:
     when: on_success
-    expire_in: 1 week
+    expire_in: 4 week
     name: "$CI_PROJECT_NAME-v6.1-ubuntu-2404-riscv64-$CI_JOB_ID"
     paths:
       - "deploy/sdcard.img.xz"
