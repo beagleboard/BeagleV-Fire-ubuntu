@@ -17,7 +17,6 @@ build-v6.1-debian-13-riscv64:
     - docker-amd64
   stage: build
   script:
-    - ./scripts/pull.sh
     - ./01_git_sync.sh
     - ./02_build_hss.sh
     - ./03_build_u-boot.sh
@@ -57,7 +56,6 @@ build-v6.1-ubuntu-2404-riscv64:
     - docker-amd64
   stage: build
   script:
-    - ./scripts/pull.sh
     - ./01_git_sync.sh
     - ./02_build_hss.sh
     - ./03_build_u-boot.sh
