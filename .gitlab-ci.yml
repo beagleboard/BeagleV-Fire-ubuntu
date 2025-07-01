@@ -31,10 +31,10 @@ build-v6.6-debian-13-riscv64:
     - ./05_generate_payload.bin.sh
     - ./06_generate_debian_console_root.sh
     - ./07_create_sdcard_img.sh
-    - xz -vT8 deploy/images/sdcard.img
     - tree -s deploy/
     - cp -v deploy/images/sdcard.img.xz ./deploy/
     - cp -v deploy/images/sdcard.bmap ./deploy/
+    - cp -v deploy/images/image.yml.txt ./deploy/
   artifacts:
     when: on_success
     expire_in: 4 week
@@ -43,6 +43,7 @@ build-v6.6-debian-13-riscv64:
       - "deploy/sdcard.img.xz"
       - "deploy/sdcard.bmap"
       - "deploy/readme.md"
+      - "deploy/image.yml.txt"
 
 build-v6.6-ubuntu-2404-riscv64:
   image: robertcnelson/beagle-devscripts-kernel-debian-12-amd64:latest
@@ -70,10 +71,10 @@ build-v6.6-ubuntu-2404-riscv64:
     - ./05_generate_payload.bin.sh
     - ./06_generate_ubuntu_console_root.sh
     - ./07_create_sdcard_img.sh
-    - xz -vT8 deploy/images/sdcard.img
     - tree -s deploy/
     - cp -v deploy/images/sdcard.img.xz ./deploy/
     - cp -v deploy/images/sdcard.bmap ./deploy/
+    - cp -v deploy/images/image.yml.txt ./deploy/
   artifacts:
     when: on_success
     expire_in: 4 week
@@ -82,3 +83,4 @@ build-v6.6-ubuntu-2404-riscv64:
       - "deploy/sdcard.img.xz"
       - "deploy/sdcard.bmap"
       - "deploy/readme.md"
+      - "deploy/image.yml.txt"
