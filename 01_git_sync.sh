@@ -3,7 +3,7 @@
 GIT_DEPTH="20"
 GCC_VERSION="11.4.0"
 
-HSS_BRANCH="v2023.09"
+HSS_BRANCH="v2024.02.1"
 HSS_REPO="https://github.com/polarfire-soc/hart-software-services.git"
 
 #UBOOT_BRANCH="v2023.02-BeagleV-Fire"
