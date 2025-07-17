@@ -19,6 +19,10 @@ if [ -f ./images/sdcard.img ] ; then
 	rm -rf ./images/sdcard.img || true
 fi
 
+if [ -f ./images/sdcard.img.xz ] ; then
+	rm -rf ./images/sdcard.img.xz || true
+fi
+
 genimage --config genimage.cfg
 
 if [ -d ./tmp ] ; then
