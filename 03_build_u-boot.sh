@@ -10,6 +10,7 @@ if [ ! -f ./.patched ] ; then
 	if [ -f configs/beaglev_fire_defconfig ] ; then
 		git am ../patches/u-boot/0001-drivers-mailbox-mpfs-mbox-add-missing-include.patch
 		git am ../patches/u-boot/0002-board-beagle-beaglev_fire-fix-compilation-warning.patch
+		git am ../patches/u-boot/0003-board-beagle-beaglev_fire-add-recovery-option.patch
 	fi
 	touch .patched
 fi

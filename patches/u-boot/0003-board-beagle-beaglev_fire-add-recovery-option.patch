@@ -1,0 +1,37 @@
+From da52a15fc720b91b39c126a2753192dddd075b17 Mon Sep 17 00:00:00 2001
+From: Lars Randers <lranders@mail.dk>
+Date: Wed, 30 Jul 2025 20:10:28 +0000
+Subject: [PATCH] board: beagle: beaglev_fire: add recovery option
+
+Signed-off-by: Lars Randers <lranders@mail.dk>
+---
+ include/configs/beaglev_fire.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/include/configs/beaglev_fire.h b/include/configs/beaglev_fire.h
+index e3ee0f02..b9ab650a 100644
+--- a/include/configs/beaglev_fire.h
++++ b/include/configs/beaglev_fire.h
+@@ -42,6 +42,11 @@
+ 		"done; " \
+ 	"fi;\0 " \
+ 
++#define BOOTENV_RECOVERY \
++	"recovery=" \
++	"setenv boot_scripts recovery.scr; " \
++	"boot;\0"
++
+ #include <config_distro_bootcmd.h>
+ 
+ #define CFG_EXTRA_ENV_SETTINGS \
+@@ -52,6 +57,7 @@
+ 	"ramdisk_addr_r=0x8aa00000\0" \
+ 	"scriptaddr=0x8e000000\0" \
+ 	BOOTENV_DESIGN_OVERLAYS \
++	BOOTENV_RECOVERY \
+ 	BOOTENV \
+ 
+ #endif /* __CONFIG_H */
+-- 
+2.39.2
+

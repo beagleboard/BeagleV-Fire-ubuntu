@@ -50,6 +50,7 @@ tar xfp ./deploy/${distro}-${version}-console-riscv64-${datestamp}/riscv64-rootf
 sync
 
 mkdir -p ./deploy/input/ || true
+cp -v ./deploy/recovery.scr deploy/input/
 cp -v ./deploy/boot.scr deploy/input/
 cp -v ./deploy/sysconf.txt deploy/input/
 
