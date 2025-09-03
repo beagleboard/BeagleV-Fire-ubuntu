@@ -14,7 +14,11 @@ Daily CI Builds: https://gitlab.com/beagle-rootfs/beaglev-fire-ubuntu
 
 ```
 sudo apt update ;\
-sudo apt-get install -y bison bmap-tools dosfstools genimage flex libelf-dev libyaml-dev mtools
+sudo apt-get install -y bison bmap-tools dosfstools flex libelf-dev libssl-dev libyaml-dev mtools
+```
+
+```
+sudo apt-get install -y genimage
 ```
 
 # Building Microchip Linux tree
