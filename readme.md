@@ -14,7 +14,7 @@ Daily CI Builds: https://gitlab.com/beagle-rootfs/beaglev-fire-ubuntu
 
 ```
 sudo apt update ;\
-sudo apt-get install -y bison bmap-tools ccache dosfstools flex libelf-dev libssl-dev libyaml-dev mtools
+sudo apt-get install -y bison bmap-tools ccache device-tree-compiler dosfstools flex libelf-dev libssl-dev libyaml-dev mtools
 ```
 
 ```
