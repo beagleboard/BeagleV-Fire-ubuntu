@@ -5,11 +5,11 @@ before_script:
   - git config --global user.name "$GITLAB_USER_NAME"
   - git config --global advice.detachedHead false
 
-build-v6.6-debian-13-riscv64:
+build-v6.12-debian-13-riscv64:
   image: robertcnelson/beagle-devscripts-kernel-debian-12-amd64:latest
   # https://openbeagle.org/beagleboard/ci-docker-images
   cache:
-    key: "$CI_PROJECT_NAME-v6.6-debian-13-riscv64"
+    key: "$CI_PROJECT_NAME-v6.12-debian-13-riscv64"
     paths:
       - mirror/x86_64-gcc-*-linux.tar.xz
       - ccache.tar.lz4
@@ -35,21 +35,24 @@ build-v6.6-debian-13-riscv64:
     - cp -v deploy/images/sdcard.img.xz ./deploy/
     - cp -v deploy/images/sdcard.bmap ./deploy/
     - cp -v deploy/images/image.yml.txt ./deploy/
+    - cp -v deploy/input/beaglev_fire.itb ./deploy/
   artifacts:
     when: on_success
     expire_in: 4 week
-    name: "$CI_PROJECT_NAME-v6.6-debian-13-riscv64-$CI_JOB_ID"
+    name: "$CI_PROJECT_NAME-v6.12-debian-13-riscv64-$CI_JOB_ID"
     paths:
+      - "deploy/*modules.tar.gz"
+      - "deploy/beaglev_fire.itb"
       - "deploy/sdcard.img.xz"
       - "deploy/sdcard.bmap"
       - "deploy/readme.md"
       - "deploy/image.yml.txt"
 
-build-v6.6-ubuntu-2404-riscv64:
+build-v6.12-ubuntu-2404-riscv64:
   image: robertcnelson/beagle-devscripts-kernel-debian-12-amd64:latest
   # https://openbeagle.org/beagleboard/ci-docker-images
   cache:
-    key: "$CI_PROJECT_NAME-v6.6-ubuntu-2404-riscv64"
+    key: "$CI_PROJECT_NAME-v6.12-ubuntu-2404-riscv64"
     paths:
       - mirror/x86_64-gcc-*-linux.tar.xz
       - ccache.tar.lz4
@@ -75,11 +78,14 @@ build-v6.6-ubuntu-2404-riscv64:
     - cp -v deploy/images/sdcard.img.xz ./deploy/
     - cp -v deploy/images/sdcard.bmap ./deploy/
     - cp -v deploy/images/image.yml.txt ./deploy/
+    - cp -v deploy/input/beaglev_fire.itb ./deploy/
   artifacts:
     when: on_success
     expire_in: 4 week
-    name: "$CI_PROJECT_NAME-v6.6-ubuntu-2404-riscv64-$CI_JOB_ID"
+    name: "$CI_PROJECT_NAME-v6.12-ubuntu-2404-riscv64-$CI_JOB_ID"
     paths:
+      - "deploy/*modules.tar.gz"
+      - "deploy/beaglev_fire.itb"
       - "deploy/sdcard.img.xz"
       - "deploy/sdcard.bmap"
       - "deploy/readme.md"
