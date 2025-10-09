@@ -8,8 +8,6 @@ cd ./u-boot/
 
 if [ ! -f ./.patched ] ; then
 	if [ -f configs/beaglev_fire_defconfig ] ; then
-		git am ../patches/u-boot/0001-drivers-mailbox-mpfs-mbox-add-missing-include.patch
-		git am ../patches/u-boot/0002-board-beagle-beaglev_fire-fix-compilation-warning.patch
 		git am ../patches/u-boot/0003-board-beagle-beaglev_fire-add-recovery-option.patch
 	fi
 	touch .patched
@@ -19,6 +17,8 @@ make ARCH=riscv CROSS_COMPILE=${CC} distclean
 
 make ARCH=riscv CROSS_COMPILE=${CC} beaglev_fire_defconfig
 #make ARCH=riscv CROSS_COMPILE=${CC} menuconfig
+
+./scripts/config --disable CONFIG_TOOLS_MKEFICAPSULE
 
 make ARCH=riscv CROSS_COMPILE=${CC} olddefconfig
 
