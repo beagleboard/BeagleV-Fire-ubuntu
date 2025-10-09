@@ -9,14 +9,14 @@ HSS_REPO="https://github.com/polarfire-soc/hart-software-services.git"
 
 #UBOOT_BRANCH="v2023.02-BeagleV-Fire"
 #UBOOT_REPO="https://openbeagle.org/beaglev-fire/beaglev-fire-u-boot.git"
-UBOOT_BRANCH="linux4microchip+fpga-2025.03"
+UBOOT_BRANCH="linux4microchip+fpga-2025.10"
 UBOOT_REPO="https://github.com/linux4microchip/u-boot-mchp.git"
 
-DT_BRANCH="v6.6.x-Beagle"
+DT_BRANCH="v6.12.x-Beagle"
 DT_REPO="https://github.com/beagleboard/BeagleBoard-DeviceTrees.git"
 #DT_REPO="git@openbeagle.org:beagleboard/BeagleBoard-DeviceTrees.git"
 
-LINUX_BRANCH="linux4microchip+fpga-2025.03"
+LINUX_BRANCH="linux4microchip+fpga-2025.10"
 LINUX_REPO="https://github.com/linux4microchip/linux.git"
 #LINUX_REPO="https://openbeagle.org/beaglev-fire/beaglev-fire-linux.git"
 #LINUX_REPO="git@openbeagle.org:beaglev-fire/beaglev-fire-linux.git"
