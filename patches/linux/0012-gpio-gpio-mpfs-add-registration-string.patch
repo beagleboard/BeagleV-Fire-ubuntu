@@ -1,25 +1,26 @@
-From 6759b8dc43985a2d6083835931257f3229b240f4 Mon Sep 17 00:00:00 2001
+From 70de29171b31c1fa3c2ee0e8f21940f2dc3e8a9e Mon Sep 17 00:00:00 2001
 From: Lars Randers <lranders@mail.dk>
-Date: Mon, 28 Oct 2024 11:55:28 +0000
+Date: Wed, 16 Jul 2025 20:11:52 +0000
 Subject: [PATCH] gpio: gpio-mpfs: add registration string
 
 Signed-off-by: Lars Randers <lranders@mail.dk>
 ---
- drivers/gpio/gpio-mpfs.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpio/gpio-mpfs.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/gpio/gpio-mpfs.c b/drivers/gpio/gpio-mpfs.c
-index d7168aa04..abf3e4151 100644
+index 8b5a6d76c..98d520144 100644
 --- a/drivers/gpio/gpio-mpfs.c
 +++ b/drivers/gpio/gpio-mpfs.c
-@@ -332,6 +332,7 @@ static int mpfs_gpio_probe(struct platform_device *pdev)
+@@ -278,6 +278,8 @@ static int mpfs_gpio_probe(struct platform_device *pdev)
+ 		girq->default_type = IRQ_TYPE_NONE;
+ 	}
  
- 	platform_set_drvdata(pdev, mpfs_gpio);
++	dev_info(dev, "Registered MPFS GPIO controller\n");
++
+ 	return devm_gpiochip_add_data(dev, &mpfs_gpio->gc, mpfs_gpio);
+ }
  
-+	dev_info(&pdev->dev, "Registered MPFS GPIO controller\n");
- 	return 0;
- 
- cleanup_clock:
 -- 
 2.39.2
 

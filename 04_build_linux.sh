@@ -11,24 +11,9 @@ if [ ! -f ./.patched ] ; then
 		git am ../patches/linux/0008-Add-wireless-regdb-regulatory-database-file.patch
 		git am ../patches/linux/0011-can-mpfs_can-add-registration-string.patch
 		git am ../patches/linux/0012-gpio-gpio-mpfs-add-registration-string.patch
+		git am ../patches/linux/0013-riscv-dts-microchip-remove-qspi-node-specifics.patch
 	fi
 	touch .patched
-fi
-
-if [ -f arch/riscv/configs/mpfs_defconfig ] ; then
-#	cp -v ../patches/linux/Makefile arch/riscv/boot/dts/microchip/Makefile
-	cp -v ../device-tree/src/riscv/microchip/mpfs-beaglev-fire.dts arch/riscv/boot/dts/microchip/
-	cp -v ../device-tree/src/riscv/microchip/mpfs-beaglev-fire-fabric.dtsi arch/riscv/boot/dts/microchip/
-	cp -v ../device-tree/src/riscv/microchip/mpfs-beaglev-fire-pinmux.dtsi arch/riscv/boot/dts/microchip/
-	#echo "************************************"
-	#git diff arch/riscv/boot/dts/microchip/ > log.txt ; cat log.txt ; rm log.txt
-	#echo "************************************"
-	#echo "Current Device Tree Changes (5 second wait)"
-	#sleep 5
-#else
-#	cp -v ../patches/linux/mainline/Makefile arch/riscv/boot/dts/microchip/Makefile
-#	cp -v ../patches/linux/mainline/dts/mpfs-beaglev-fire.dts arch/riscv/boot/dts/microchip/
-#	cp -v ../patches/linux/mainline/dts/mpfs-beaglev-fire-fabric.dtsi arch/riscv/boot/dts/microchip/
 fi
 
 echo "make ARCH=riscv CROSS_COMPILE=${CC} clean"
@@ -42,20 +27,6 @@ if [ -f arch/riscv/configs/mpfs_defconfig ] ; then
 
 	./scripts/config --set-str CONFIG_LOCALVERSION "-$(date +%Y%m%d)"
 	./scripts/config --module CONFIG_IKHEADERS
-
-	#6.1 to 6.6 switches
-	./scripts/config --disable CONFIG_FW_LOADER_DEBUG
-	./scripts/config --disable CONFIG_FW_CACHE
-	./scripts/config --enable CONFIG_MFD_SYSCON
-	./scripts/config --enable CONFIG_POLARFIRE_SOC_SYS_CTRL
-	./scripts/config --enable CONFIG_POLARFIRE_SOC_GENERIC_SERVICE
-	./scripts/config --enable CONFIG_POLARFIRE_SOC_MAILBOX
-	./scripts/config --enable CONFIG_POLARFIRE_SOC_AUTO_UPDATE
-	./scripts/config --enable CONFIG_HW_RANDOM_POLARFIRE_SOC
-
-
-	./scripts/config --enable CONFIG_OF_OVERLAY
-	./scripts/config --disable CONFIG_MODULE_DECOMPRESS
 
 	#enable CONFIG_DYNAMIC_FTRACE
 	./scripts/config --enable CONFIG_FUNCTION_TRACER
@@ -79,10 +50,6 @@ if [ -f arch/riscv/configs/mpfs_defconfig ] ; then
 	./scripts/config --enable CONFIG_CRYPTO_HMAC
 	./scripts/config --enable CONFIG_CRYPTO_SHA512
 	./scripts/config --enable CONFIG_CRYPTO_SHA1
-
-	./scripts/config --enable CONFIG_SENSORS_POLARFIRE_SOC_TVS
-	./scripts/config --module CONFIG_CAN
-	./scripts/config --module CONFIG_CAN_POLARFIRE_SOC
 
 	#non-workable on RevA
 	./scripts/config --disable CONFIG_VIDEO_IMX219
@@ -211,15 +178,6 @@ tar --create --gzip --file "../${KERNEL_UTS}-modules.tar.gz" ./*
 cd "${wdir}/linux/" || exit
 rm -rf "${wdir}/deploy/tmp" || true
 
-if [ -f arch/riscv/configs/mpfs_defconfig ] ; then
-	cp -v ./.config ../patches/linux/mpfs_defconfig
-	cp -v ./arch/riscv/boot/dts/microchip/mpfs-beaglev-fire.dts ../patches/linux/dts/mpfs-beaglev-fire.dts
-	cp -v ./arch/riscv/boot/dts/microchip/mpfs-beaglev-fire-fabric.dtsi ../patches/linux/dts/mpfs-beaglev-fire-fabric.dtsi
-else
-	cp -v ./.config ../patches/linux/mainline/defconfig
-	cp -v ./arch/riscv/boot/dts/microchip/mpfs-beaglev-fire.dts ../patches/linux/mainline/dts/mpfs-beaglev-fire.dts
-	cp -v ./arch/riscv/boot/dts/microchip/mpfs-beaglev-fire-fabric.dtsi ../patches/linux/mainline/dts/mpfs-beaglev-fire-fabric.dtsi
-fi
 if [ ! -d ../deploy/input/ ] ; then
 	mkdir -p ../deploy/input/ || true
 fi
