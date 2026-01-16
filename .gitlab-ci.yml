@@ -1,33 +1,37 @@
 before_script:
   - export PATH=/usr/lib/ccache:$PATH
+  - export CCACHE_DIR=/dev/shm/my-ccache-in-memory
+  - export CCACHE_NOCOMPRESS=1
+  - df -h /dev/shm
   - touch .gitlab-runner
   - git config --global user.email "$GITLAB_USER_EMAIL"
   - git config --global user.name "$GITLAB_USER_NAME"
   - git config --global advice.detachedHead false
 
 build-v6.6-debian-13-riscv64:
-  image: robertcnelson/beagle-devscripts-kernel-debian-12-amd64:latest
+  image: robertcnelson/beagle-devscripts-kernel-debian-13-amd64:latest
   # https://openbeagle.org/beagleboard/ci-docker-images
   cache:
     key: "$CI_PROJECT_NAME-v6.6-debian-13-riscv64"
     paths:
       - mirror/x86_64-gcc-*-linux.tar.xz
-      - ccache.tar.lz4
+      - ccache.tar.zst
   tags:
     - docker-amd64
   stage: build
   script:
+    - tar --zstd -xf ccache.tar.zst -C / || true
+    - df -h /dev/shm
+    - ccache -M 5G
+    - ccache -sv
+    - ccache -z
     - ./01_git_sync.sh
     - ./02_build_hss.sh
     - ./03_build_u-boot.sh
-    - mkdir -p /root/.cache/ccache/ || true
-    - tar --use-compress-program=lz4 -xf ccache.tar.lz4 -C / || true
-    - ccache -M 1G
-    - ccache -z
     - ./04_build_linux.sh
     - ccache -sv
-    - tar --use-compress-program=lz4 -cf ccache.tar.lz4 /root/.cache/ccache/
-    - du -sh ccache.tar.lz4
+    - df -h /dev/shm
+    - tar --use-compress-program='zstd -6' -cf ccache.tar.zst /dev/shm/my-ccache-in-memory
     - ./05_generate_payload.bin.sh
     - ./06_generate_debian_console_root.sh
     - ./07_create_sdcard_img.sh
@@ -35,39 +39,43 @@ build-v6.6-debian-13-riscv64:
     - cp -v deploy/images/sdcard.img.xz ./deploy/
     - cp -v deploy/images/sdcard.bmap ./deploy/
     - cp -v deploy/images/image.yml.txt ./deploy/
+    - cp -v deploy/input/beaglev_fire.itb ./deploy/
   artifacts:
     when: on_success
-    expire_in: 4 week
+    expire_in: 2 week
     name: "$CI_PROJECT_NAME-v6.6-debian-13-riscv64-$CI_JOB_ID"
     paths:
+      - "deploy/*modules.tar.gz"
+      - "deploy/beaglev_fire.itb"
       - "deploy/sdcard.img.xz"
       - "deploy/sdcard.bmap"
       - "deploy/readme.md"
       - "deploy/image.yml.txt"
 
 build-v6.6-ubuntu-2404-riscv64:
-  image: robertcnelson/beagle-devscripts-kernel-debian-12-amd64:latest
+  image: robertcnelson/beagle-devscripts-kernel-debian-13-amd64:latest
   # https://openbeagle.org/beagleboard/ci-docker-images
   cache:
     key: "$CI_PROJECT_NAME-v6.6-ubuntu-2404-riscv64"
     paths:
       - mirror/x86_64-gcc-*-linux.tar.xz
-      - ccache.tar.lz4
+      - ccache.tar.zst
   tags:
     - docker-amd64
   stage: build
   script:
+    - tar --zstd -xf ccache.tar.zst -C / || true
+    - df -h /dev/shm
+    - ccache -M 5G
+    - ccache -sv
+    - ccache -z
     - ./01_git_sync.sh
     - ./02_build_hss.sh
     - ./03_build_u-boot.sh
-    - mkdir -p /root/.cache/ccache/ || true
-    - tar --use-compress-program=lz4 -xf ccache.tar.lz4 -C / || true
-    - ccache -M 1G
-    - ccache -z
     - ./04_build_linux.sh
     - ccache -sv
-    - tar --use-compress-program=lz4 -cf ccache.tar.lz4 /root/.cache/ccache/
-    - du -sh ccache.tar.lz4
+    - df -h /dev/shm
+    - tar --use-compress-program='zstd -6' -cf ccache.tar.zst /dev/shm/my-ccache-in-memory
     - ./05_generate_payload.bin.sh
     - ./06_generate_ubuntu_console_root.sh
     - ./07_create_sdcard_img.sh
@@ -75,11 +83,14 @@ build-v6.6-ubuntu-2404-riscv64:
     - cp -v deploy/images/sdcard.img.xz ./deploy/
     - cp -v deploy/images/sdcard.bmap ./deploy/
     - cp -v deploy/images/image.yml.txt ./deploy/
+    - cp -v deploy/input/beaglev_fire.itb ./deploy/
   artifacts:
     when: on_success
-    expire_in: 4 week
+    expire_in: 2 week
     name: "$CI_PROJECT_NAME-v6.6-ubuntu-2404-riscv64-$CI_JOB_ID"
     paths:
+      - "deploy/*modules.tar.gz"
+      - "deploy/beaglev_fire.itb"
       - "deploy/sdcard.img.xz"
       - "deploy/sdcard.bmap"
       - "deploy/readme.md"
