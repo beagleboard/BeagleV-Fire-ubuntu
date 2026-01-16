@@ -9,7 +9,7 @@ before_script:
   - git config --global advice.detachedHead false
 
 build-v6.12-debian-13-riscv64:
-  image: robertcnelson/beagle-devscripts-kernel-debian-12-amd64:latest
+  image: robertcnelson/beagle-devscripts-kernel-debian-13-amd64:latest
   # https://openbeagle.org/beagleboard/ci-docker-images
   cache:
     key: "$CI_PROJECT_NAME-v6.12-debian-13-riscv64"
@@ -42,7 +42,7 @@ build-v6.12-debian-13-riscv64:
     - cp -v deploy/input/beaglev_fire.itb ./deploy/
   artifacts:
     when: on_success
-    expire_in: 4 week
+    expire_in: 2 week
     name: "$CI_PROJECT_NAME-v6.12-debian-13-riscv64-$CI_JOB_ID"
     paths:
       - "deploy/*modules.tar.gz"
@@ -53,7 +53,7 @@ build-v6.12-debian-13-riscv64:
       - "deploy/image.yml.txt"
 
 build-v6.12-ubuntu-2404-riscv64:
-  image: robertcnelson/beagle-devscripts-kernel-debian-12-amd64:latest
+  image: robertcnelson/beagle-devscripts-kernel-debian-13-amd64:latest
   # https://openbeagle.org/beagleboard/ci-docker-images
   cache:
     key: "$CI_PROJECT_NAME-v6.12-ubuntu-2404-riscv64"
@@ -86,7 +86,7 @@ build-v6.12-ubuntu-2404-riscv64:
     - cp -v deploy/input/beaglev_fire.itb ./deploy/
   artifacts:
     when: on_success
-    expire_in: 4 week
+    expire_in: 2 week
     name: "$CI_PROJECT_NAME-v6.12-ubuntu-2404-riscv64-$CI_JOB_ID"
     paths:
       - "deploy/*modules.tar.gz"
