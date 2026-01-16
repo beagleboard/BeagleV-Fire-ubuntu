@@ -4,7 +4,7 @@ GIT_DEPTH="20"
 GCC_VERSION="11.4.0"
 
 #HSS stay in sync with gatware fpga builds...
-HSS_BRANCH="v2025.03"
+HSS_BRANCH="v2025.06"
 HSS_REPO="https://github.com/polarfire-soc/hart-software-services.git"
 
 #UBOOT_BRANCH="v2023.02-BeagleV-Fire"
