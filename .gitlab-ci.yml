@@ -1,5 +1,8 @@
 before_script:
   - export PATH=/usr/lib/ccache:$PATH
+  - export CCACHE_DIR=/dev/shm/my-ccache-in-memory
+  - export CCACHE_NOCOMPRESS=1
+  - df -h /dev/shm
   - touch .gitlab-runner
   - git config --global user.email "$GITLAB_USER_EMAIL"
   - git config --global user.name "$GITLAB_USER_NAME"
@@ -12,22 +15,23 @@ build-v6.12-debian-13-riscv64:
     key: "$CI_PROJECT_NAME-v6.12-debian-13-riscv64"
     paths:
       - mirror/x86_64-gcc-*-linux.tar.xz
-      - ccache.tar.lz4
+      - ccache.tar.zst
   tags:
     - docker-amd64
   stage: build
   script:
+    - tar --zstd -xf ccache.tar.zst -C / || true
+    - df -h /dev/shm
+    - ccache -M 5G
+    - ccache -sv
+    - ccache -z
     - ./01_git_sync.sh
     - ./02_build_hss.sh
     - ./03_build_u-boot.sh
-    - mkdir -p /root/.cache/ccache/ || true
-    - tar --use-compress-program=lz4 -xf ccache.tar.lz4 -C / || true
-    - ccache -M 1G
-    - ccache -z
     - ./04_build_linux.sh
     - ccache -sv
-    - tar --use-compress-program=lz4 -cf ccache.tar.lz4 /root/.cache/ccache/
-    - du -sh ccache.tar.lz4
+    - df -h /dev/shm
+    - tar --use-compress-program='zstd -6' -cf ccache.tar.zst /dev/shm/my-ccache-in-memory
     - ./05_generate_payload.bin.sh
     - ./06_generate_debian_console_root.sh
     - ./07_create_sdcard_img.sh
@@ -55,22 +59,23 @@ build-v6.12-ubuntu-2404-riscv64:
     key: "$CI_PROJECT_NAME-v6.12-ubuntu-2404-riscv64"
     paths:
       - mirror/x86_64-gcc-*-linux.tar.xz
-      - ccache.tar.lz4
+      - ccache.tar.zst
   tags:
     - docker-amd64
   stage: build
   script:
+    - tar --zstd -xf ccache.tar.zst -C / || true
+    - df -h /dev/shm
+    - ccache -M 5G
+    - ccache -sv
+    - ccache -z
     - ./01_git_sync.sh
     - ./02_build_hss.sh
     - ./03_build_u-boot.sh
-    - mkdir -p /root/.cache/ccache/ || true
-    - tar --use-compress-program=lz4 -xf ccache.tar.lz4 -C / || true
-    - ccache -M 1G
-    - ccache -z
     - ./04_build_linux.sh
     - ccache -sv
-    - tar --use-compress-program=lz4 -cf ccache.tar.lz4 /root/.cache/ccache/
-    - du -sh ccache.tar.lz4
+    - df -h /dev/shm
+    - tar --use-compress-program='zstd -6' -cf ccache.tar.zst /dev/shm/my-ccache-in-memory
     - ./05_generate_payload.bin.sh
     - ./06_generate_ubuntu_console_root.sh
     - ./07_create_sdcard_img.sh
