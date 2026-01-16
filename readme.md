@@ -1,6 +1,6 @@
 # Weekly BUILDS for Debian 13 (trixie) and Ubuntu 24.04 (noble)
 
-https://gitlab.com/beagle-rootfs/beaglev-fire-ubuntu/-/artifacts
+https://openbeagle.org/beaglev-fire/BeagleV-Fire-ubuntu/-/artifacts
 
 # Mirrors:
 
