@@ -23,7 +23,7 @@ if [ -f /tmp/latest ] ; then
 	if [ ! -f ./deploy/${distro}-${version}-console-riscv64-${datestamp}/riscv64-rootfs-${distro}-${codename}.tar ] ; then
 		echo "wget [${datestamp}/${latest_rootfs}]"
 		if [ -f ./.gitlab-runner ] ; then
-			wget -c --quiet --directory-prefix=./deploy http://192.168.1.98/mirror/rcn-ee.us/rootfs/${distro}-riscv64-${version}-minimal/${datestamp}/${latest_rootfs}
+			wget -c --quiet --directory-prefix=./deploy http://192.168.1.51/rcn-ee.us/rootfs/${distro}-riscv64-${version}-minimal/${datestamp}/${latest_rootfs}
 		else
 			wget -c --directory-prefix=./deploy https://rcn-ee.net/rootfs/${distro}-riscv64-${version}-minimal/${datestamp}/${latest_rootfs}
 		fi
