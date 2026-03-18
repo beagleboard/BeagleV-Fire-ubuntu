@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# SPDX-FileCopyrightText: Robert Nelson <robertcnelson@gmail.com>
+#
+# SPDX-License-Identifier: MIT
+
+#
+#https://packages.debian.org/source/trixie/linux
+#
+abi="6.12"
+kernel="6.12.73-1"
+#
+
+debian_site="http://deb.debian.org/debian/pool/main/l/linux"
+debian_security_site="http://deb.debian.org/debian-security/pool/main/l/linux"
+incoming_site="http://incoming.debian.org/debian-buildd/pool/main/l/linux"
+
+dl_deb () {
+	if [ ! -f ./dl/linux-config-${abi}_${kernel}_${dpkg_arch}.deb ] ; then
+		wget -cq --directory-prefix=./dl/ ${debian_site}/linux-config-${abi}_${kernel}_${dpkg_arch}.deb
+	fi
+
+	if [ ! -f ./dl/linux-config-${abi}_${kernel}_${dpkg_arch}.deb ] ; then
+		wget -cq --directory-prefix=./dl/ ${incoming_site}/linux-config-${abi}_${kernel}_${dpkg_arch}.deb
+	fi
+
+	if [ ! -f ./dl/linux-config-${abi}_${kernel}_${dpkg_arch}.deb ] ; then
+		wget -cq --directory-prefix=./dl/ ${debian_security_site}/linux-config-${abi}_${kernel}_${dpkg_arch}.deb
+	fi
+
+	if [ -f ./dl/linux-config-${abi}_${kernel}_${dpkg_arch}.deb ] ; then
+		echo "[linux-config-${abi}_${kernel}_${dpkg_arch}.deb]"
+		dpkg -x ./dl/linux-config-${abi}_${kernel}_${dpkg_arch}.deb ./dl/tmp/
+		if [ -f ./dl/tmp/usr/src/linux-config-${abi}/config.${dpkg_arch}_${config}.xz ] ; then
+			xzcat -v ./dl/tmp/usr/src/linux-config-${abi}/config.${dpkg_arch}_${config}.xz > ./debian.config
+		else
+			tree ./dl/tmp/usr/src/linux-config-${abi}/
+			exit 2
+		fi
+		rm -rf ./dl/tmp/ || true
+	else
+		echo "[linux-config-${abi}_${kernel}_${dpkg_arch}.deb] NOT BUILT YET"
+	fi
+}
+
+dpkg_arch="riscv64"
+config="none_riscv64"
+dl_deb
+
+rm -rf ./dl/ || true
+
+#
