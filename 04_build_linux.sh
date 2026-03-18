@@ -95,6 +95,8 @@ if [ -f arch/riscv/configs/mpfs_defconfig ] ; then
 	./scripts/config --set-val CONFIG_SERIAL_8250_NR_UARTS 8
 	./scripts/config --set-val CONFIG_SERIAL_8250_RUNTIME_UARTS 8
 
+	./scripts/config --module CONFIG_TUN
+
 	echo "make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} olddefconfig"
 	make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} olddefconfig
 else
