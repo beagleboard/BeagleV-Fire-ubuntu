@@ -20,7 +20,8 @@ echo "make ARCH=riscv CROSS_COMPILE=${CC} clean"
 make ARCH=riscv CROSS_COMPILE=${CC} clean
 
 if [ -f arch/riscv/configs/mpfs_defconfig ] ; then
-	cp -v ../patches/linux/mpfs_defconfig ./arch/riscv/configs/mpfs_defconfig
+	echo "Config: Backup Microchip mpfs_defconfig"
+	cp -v  ./arch/riscv/configs/mpfs_defconfig ../patches/linux/mpfs_defconfig
 
 	echo "make ARCH=riscv CROSS_COMPILE=${CC} mpfs_defconfig"
 	make ARCH=riscv CROSS_COMPILE=${CC} mpfs_defconfig
@@ -64,6 +65,9 @@ if [ -f arch/riscv/configs/mpfs_defconfig ] ; then
 
 	echo "make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} olddefconfig"
 	make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} olddefconfig
+
+	echo "Config: Backup our custom linux/beaglev-fire_defconfig"
+	cp -v .config ../patches/linux/beaglev-fire_defconfig
 else
 	echo "make ARCH=riscv CROSS_COMPILE=${CC} defconfig"
 	make ARCH=riscv CROSS_COMPILE=${CC} defconfig
