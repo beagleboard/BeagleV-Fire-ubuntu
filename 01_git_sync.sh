@@ -1,7 +1,7 @@
 #!/bin/bash
 
 GIT_DEPTH="20"
-GCC_VERSION="11.5.0"
+GCC_VERSION="12.5.0"
 
 #HSS stay in sync with gatware fpga builds...
 HSS_BRANCH="v2025.07"

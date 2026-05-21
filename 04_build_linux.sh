@@ -122,7 +122,7 @@ if [ -f arch/riscv/configs/mpfs_defconfig ] ; then
 	./scripts/config --disable CONFIG_RUNTIME_TESTING_MENU
 	./scripts/config --enable CONFIG_MEMTEST
 
-	"Config: Backup our custom linux/beaglev-fire_defconfig"
+	### Config: Backup our custom linux/beaglev-fire_defconfig
 	make ARCH=riscv CROSS_COMPILE=${CC} olddefconfig
 	cp -v .config ../patches/linux/beaglev-fire_defconfig
 fi
