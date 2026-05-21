@@ -35,7 +35,6 @@ if [ -f arch/riscv/configs/mpfs_defconfig ] ; then
 
 	./scripts/config --disable CONFIG_MODULE_COMPRESS_ZSTD
 	./scripts/config --enable CONFIG_MODULE_COMPRESS_XZ
-	./scripts/config --enable CONFIG_GPIO_AGGREGATOR
 
 	./scripts/config --enable CONFIG_CRYPTO_USER_API_HASH
 	./scripts/config --enable CONFIG_CRYPTO_USER_API_SKCIPHER
@@ -55,18 +54,57 @@ if [ -f arch/riscv/configs/mpfs_defconfig ] ; then
 	#non-workable on RevA
 	./scripts/config --disable CONFIG_VIDEO_IMX219
 
+	#
+	# Firmware loader
+	#
+	./scripts/config --set-str CONFIG_EXTRA_FIRMWARE "regulatory.db regulatory.db.p7s"
+	./scripts/config --set-str CONFIG_EXTRA_FIRMWARE_DIR "firmware"
+
 	./scripts/config --enable CONFIG_FW_LOADER_COMPRESS
 	./scripts/config --enable CONFIG_FW_LOADER_COMPRESS_XZ
 	./scripts/config --enable CONFIG_FW_LOADER_COMPRESS_ZSTD
 
-	#Bump the number of default uarts allowed
+	#
+	# Serial drivers
+	#
 	./scripts/config --set-val CONFIG_SERIAL_8250_NR_UARTS 8
 	./scripts/config --set-val CONFIG_SERIAL_8250_RUNTIME_UARTS 8
 
-	echo "make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} olddefconfig"
-	make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} olddefconfig
+	#
+	# Virtual GPIO drivers
+	#
+	./scripts/config --enable CONFIG_GPIO_AGGREGATOR
+	./scripts/config --module CONFIG_GPIO_LATCH
 
-	echo "Config: Backup our custom linux/beaglev-fire_defconfig"
+	#
+	# Extcon Device Drivers
+	#
+	./scripts/config --enable CONFIG_IIO_BUFFER
+	./scripts/config --enable CONFIG_IIO_TRIGGER
+	./scripts/config --module CONFIG_IIO_TRIGGERED_EVENT
+
+	#
+	# Security options
+	#
+	./scripts/config --enable CONFIG_ENCRYPTED_KEYS
+	./scripts/config --enable CONFIG_KEY_DH_OPERATIONS
+	./scripts/config --enable CONFIG_SECURITY
+	./scripts/config --enable CONFIG_SECURITYFS
+	./scripts/config --enable CONFIG_HARDENED_USERCOPY
+	./scripts/config --enable CONFIG_FORTIFY_SOURCE
+
+	# end of RCU Debugging
+	./scripts/config --disable CONFIG_SAMPLES
+	./scripts/config --disable CONFIG_STRICT_DEVMEM
+
+	#
+	# Kernel Testing and Coverage
+	#
+	./scripts/config --disable CONFIG_RUNTIME_TESTING_MENU
+	./scripts/config --enable CONFIG_MEMTEST
+
+	"Config: Backup our custom linux/beaglev-fire_defconfig"
+	make ARCH=riscv CROSS_COMPILE=${CC} olddefconfig
 	cp -v .config ../patches/linux/beaglev-fire_defconfig
 fi
 
