@@ -69,6 +69,11 @@ if [ -f arch/riscv/configs/mpfs_defconfig ] ; then
 	./scripts/config --disable CONFIG_VIDEO_IMX219
 
 	#
+	# Boot options
+	#
+	./scripts/config --set-str CONFIG_CMDLINE "root=/dev/mmcblk0p3 ro rootfstype=ext4 rootwait console=ttyS0,115200 earlycon uio_pdrv_genirq.of_id=generic-uio net.ifnames=0"
+
+	#
 	# Firmware loader
 	#
 	./scripts/config --set-str CONFIG_EXTRA_FIRMWARE "regulatory.db regulatory.db.p7s"

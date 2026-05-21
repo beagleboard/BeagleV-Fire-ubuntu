@@ -397,7 +397,7 @@ CONFIG_COMPAT=y
 #
 # Boot options
 #
-CONFIG_CMDLINE="earlycon uio_pdrv_genirq.of_id=generic-uio"
+CONFIG_CMDLINE="root=/dev/mmcblk0p3 ro rootfstype=ext4 rootwait console=ttyS0,115200 earlycon uio_pdrv_genirq.of_id=generic-uio net.ifnames=0"
 CONFIG_CMDLINE_FALLBACK=y
 # CONFIG_CMDLINE_EXTEND is not set
 # CONFIG_CMDLINE_FORCE is not set
