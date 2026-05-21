@@ -68,6 +68,16 @@ if [ -f arch/riscv/configs/mpfs_defconfig ] ; then
 	#non-workable on RevA
 	./scripts/config --disable CONFIG_VIDEO_IMX219
 
+	./scripts/config --module CONFIG_RFKILL
+	./scripts/config --enable CONFIG_RFKILL_INPUT
+
+	# iwd:
+	./scripts/config --enable CONFIG_ASYMMETRIC_KEY_TYPE
+	./scripts/config --enable CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE
+	./scripts/config --enable CONFIG_PKCS7_MESSAGE_PARSER
+	./scripts/config --enable CONFIG_X509_CERTIFICATE_PARSER
+	./scripts/config --enable CONFIG_PKCS8_PRIVATE_KEY_PARSER
+
 	#
 	# Boot options
 	#
@@ -82,6 +92,16 @@ if [ -f arch/riscv/configs/mpfs_defconfig ] ; then
 	./scripts/config --enable CONFIG_FW_LOADER_COMPRESS
 	./scripts/config --enable CONFIG_FW_LOADER_COMPRESS_XZ
 	./scripts/config --enable CONFIG_FW_LOADER_COMPRESS_ZSTD
+
+	# end of LPDDR & LPDDR2 PCM memory drivers
+	./scripts/config --module CONFIG_ZRAM
+	./scripts/config --enable CONFIG_ZRAM_BACKEND_LZ4
+	./scripts/config --enable CONFIG_ZRAM_BACKEND_LZ4HC
+	./scripts/config --enable CONFIG_ZRAM_BACKEND_ZSTD
+	./scripts/config --enable CONFIG_ZRAM_BACKEND_DEFLATE
+	./scripts/config --enable CONFIG_ZRAM_WRITEBACK
+	./scripts/config --enable CONFIG_ZRAM_TRACK_ENTRY_ACTIME
+	./scripts/config --enable CONFIG_ZRAM_MEMORY_TRACKING
 
 	#
 	# Serial drivers
