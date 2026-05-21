@@ -78,6 +78,34 @@ if [ -f arch/riscv/configs/mpfs_defconfig ] ; then
 	./scripts/config --enable CONFIG_X509_CERTIFICATE_PARSER
 	./scripts/config --enable CONFIG_PKCS8_PRIVATE_KEY_PARSER
 
+	# USB gadget:
+	./scripts/config --enable CONFIG_USB_GADGET
+	./scripts/config --enable CONFIG_USB_LIBCOMPOSITE
+	./scripts/config --enable CONFIG_USB_F_ACM
+	./scripts/config --enable CONFIG_USB_F_SS_LB
+	./scripts/config --enable CONFIG_USB_U_SERIAL
+	./scripts/config --enable CONFIG_USB_U_ETHER
+	./scripts/config --enable CONFIG_USB_F_SERIAL
+	./scripts/config --enable CONFIG_USB_F_NCM
+	./scripts/config --enable CONFIG_USB_F_ECM
+	./scripts/config --enable CONFIG_USB_F_EEM
+	./scripts/config --enable CONFIG_USB_F_SUBSET
+	./scripts/config --enable CONFIG_USB_F_RNDIS
+	./scripts/config --enable CONFIG_USB_F_MASS_STORAGE
+	./scripts/config --enable CONFIG_USB_F_FS
+
+	./scripts/config --enable CONFIG_USB_CONFIGFS
+	./scripts/config --enable CONFIG_USB_CONFIGFS_SERIAL
+	./scripts/config --enable CONFIG_USB_CONFIGFS_ACM
+	./scripts/config --enable CONFIG_USB_CONFIGFS_NCM
+	./scripts/config --enable CONFIG_USB_CONFIGFS_ECM
+	./scripts/config --enable CONFIG_USB_CONFIGFS_ECM_SUBSET
+	./scripts/config --enable CONFIG_USB_CONFIGFS_RNDIS
+	./scripts/config --enable CONFIG_USB_CONFIGFS_EEM
+	./scripts/config --enable CONFIG_USB_CONFIGFS_MASS_STORAGE
+	./scripts/config --enable CONFIG_USB_CONFIGFS_F_LB_SS
+	./scripts/config --enable CONFIG_USB_CONFIGFS_F_FS
+
 	#
 	# Boot options
 	#
