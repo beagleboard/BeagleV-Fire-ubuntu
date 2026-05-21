@@ -20,11 +20,11 @@ echo "make ARCH=riscv CROSS_COMPILE=${CC} clean"
 make ARCH=riscv CROSS_COMPILE=${CC} clean
 
 if [ -f arch/riscv/configs/mpfs_defconfig ] ; then
-	echo "Config: Backup Microchip mpfs_defconfig"
-	cp -v  ./arch/riscv/configs/mpfs_defconfig ../patches/linux/mpfs_defconfig
-
-	echo "make ARCH=riscv CROSS_COMPILE=${CC} mpfs_defconfig"
 	make ARCH=riscv CROSS_COMPILE=${CC} mpfs_defconfig
+	make ARCH=riscv CROSS_COMPILE=${CC} olddefconfig
+
+	### We use mpfs_defconfig as the base, keep track of Microchip config changes
+	cp -v .config ../patches/linux/mpfs_defconfig
 
 	./scripts/config --set-str CONFIG_LOCALVERSION "-$(date +%Y%m%d)"
 	./scripts/config --module CONFIG_IKHEADERS
@@ -68,87 +68,6 @@ if [ -f arch/riscv/configs/mpfs_defconfig ] ; then
 
 	echo "Config: Backup our custom linux/beaglev-fire_defconfig"
 	cp -v .config ../patches/linux/beaglev-fire_defconfig
-else
-	echo "make ARCH=riscv CROSS_COMPILE=${CC} defconfig"
-	make ARCH=riscv CROSS_COMPILE=${CC} defconfig
-
-	./scripts/config --enable CONFIG_PCIE_MICROCHIP_HOST
-
-	./scripts/config --enable CONFIG_OF_OVERLAY
-	./scripts/config --enable CONFIG_MODULE_COMPRESS_ZSTD
-
-	./scripts/config --enable CONFIG_I2C
-	./scripts/config --enable CONFIG_EEPROM_AT24
-	./scripts/config --enable CONFIG_I2C_MICROCHIP_CORE
-
-	./scripts/config --enable CONFIG_SPI_MICROCHIP_CORE
-	./scripts/config --enable CONFIG_SPI_MICROCHIP_CORE_QSPI
-	./scripts/config --module CONFIG_SPI_SPIDEV
-
-	./scripts/config --enable CONFIG_GPIO_SYSFS
-
-	./scripts/config --enable CONFIG_HW_RANDOM_POLARFIRE_SOC
-
-	./scripts/config --enable CONFIG_USB_MUSB_HDRC
-	./scripts/config --enable CONFIG_NOP_USB_XCEIV
-	./scripts/config --enable CONFIG_USB_MUSB_POLARFIRE_SOC
-	./scripts/config --enable CONFIG_USB_MUSB_DUAL_ROLE
-
-	./scripts/config --enable CONFIG_MAILBOX
-	./scripts/config --enable CONFIG_POLARFIRE_SOC_MAILBOX
-	./scripts/config --disable CONFIG_SUN6I_MSGBOX
-
-	./scripts/config --enable CONFIG_REMOTEPROC
-	./scripts/config --enable CONFIG_REMOTEPROC_CDEV
-
-	./scripts/config --enable CONFIG_POLARFIRE_SOC_SYS_CTRL
-
-	./scripts/config --enable CONFIG_USB_GADGET
-	./scripts/config --enable CONFIG_USB_CONFIGFS
-	./scripts/config --enable CONFIG_CONFIGFS_FS
-	./scripts/config --enable CONFIG_USB_CONFIGFS_SERIAL
-	./scripts/config --enable CONFIG_USB_CONFIGFS_ACM
-	./scripts/config --enable CONFIG_USB_CONFIGFS_OBEX
-	./scripts/config --enable CONFIG_USB_CONFIGFS_NCM
-	./scripts/config --enable CONFIG_USB_CONFIGFS_ECM
-	./scripts/config --enable CONFIG_USB_CONFIGFS_ECM_SUBSET
-	./scripts/config --enable CONFIG_USB_CONFIGFS_RNDIS
-	./scripts/config --enable CONFIG_USB_CONFIGFS_EEM
-	./scripts/config --enable CONFIG_USB_CONFIGFS_PHONET
-	./scripts/config --enable CONFIG_USB_CONFIGFS_MASS_STORAGE
-	./scripts/config --enable CONFIG_USB_CONFIGFS_F_LB_SS
-	./scripts/config --enable CONFIG_USB_CONFIGFS_F_FS
-	./scripts/config --enable CONFIG_USB_CONFIGFS_F_UAC1
-	./scripts/config --enable CONFIG_USB_CONFIGFS_F_UAC2
-	./scripts/config --enable CONFIG_USB_CONFIGFS_F_MIDI
-	./scripts/config --enable CONFIG_USB_CONFIGFS_F_HID
-	./scripts/config --enable CONFIG_USB_CONFIGFS_F_UVC
-	./scripts/config --enable CONFIG_USB_CONFIGFS_F_PRINTER
-
-	./scripts/config --module CONFIG_MEDIA_SUPPORT
-	./scripts/config --enable CONFIG_MEDIA_SUPPORT_FILTER
-	./scripts/config --enable CONFIG_MEDIA_SUBDRV_AUTOSELECT
-	./scripts/config --enable CONFIG_MEDIA_CAMERA_SUPPORT
-	./scripts/config --module CONFIG_VIDEO_IMX219
-
-	./scripts/config --module CONFIG_IIO
-
-	#Cleanup large DRM...
-	./scripts/config --disable CONFIG_DRM
-	./scripts/config --disable CONFIG_DRM_RADEON
-	./scripts/config --disable CONFIG_DRM_NOUVEAU
-	./scripts/config --disable CONFIG_DRM_SUN4I
-
-	#Optimize:
-	./scripts/config --enable CONFIG_IP_NF_IPTABLES
-	./scripts/config --enable CONFIG_NETFILTER_XTABLES
-	./scripts/config --enable CONFIG_NLS_ISO8859_1
-	./scripts/config --enable CONFIG_BLK_DEV_DM
-
-	./scripts/config --set-str CONFIG_LOCALVERSION "-$(date +%Y%m%d)"
-
-	echo "make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} olddefconfig"
-	make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} olddefconfig
 fi
 
 #echo "make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} menuconfig"
