@@ -1,7 +1,13 @@
+# SPDX-FileCopyrightText: Robert Nelson <robertcnelson@gmail.com>
+#
+# SPDX-License-Identifier: MIT
+
+variables:
+  TRANSFER_METER_FREQUENCY: "5s"
+
 before_script:
   - export PATH=/usr/lib/ccache:$PATH
   - export CCACHE_DIR=/dev/shm/my-ccache-in-memory
-  - export CCACHE_NOCOMPRESS=1
   - df -h /dev/shm
   - touch .gitlab-runner
   - git config --global user.email "$GITLAB_USER_EMAIL"
@@ -53,7 +59,7 @@ build-v6.12-debian-13-riscv64:
       - "deploy/image.yml.txt"
 
 build-v6.12-ubuntu-2404-riscv64:
-  image: robertcnelson/beagle-devscripts-kernel-debian-13-amd64:latest
+  image: robertcnelson/beagle-devscripts-kernel-ubuntu-24.04-amd64:latest
   # https://openbeagle.org/beagleboard/ci-docker-images
   cache:
     key: "$CI_PROJECT_NAME-v6.12-ubuntu-2404-riscv64"
