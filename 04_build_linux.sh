@@ -13,19 +13,19 @@ if [ ! -f ./.patched ] ; then
 		git am ../patches/linux/0012-gpio-gpio-mpfs-add-registration-string.patch
 		git am ../patches/linux/0013-riscv-dts-microchip-remove-qspi-node-specifics.patch
 
-		git am ../patches/linux/6.12.85/b4-crypto/0001-sync-crypto-authencesn.c-with-v6.12.84.patch
-		git am ../patches/linux/6.12.85/crypto/0001-crypto-scatterwalk-Backport-memcpy_sglist.patch
-		git am ../patches/linux/6.12.85/crypto/0002-crypto-algif_aead-use-memcpy_sglist-instead-of-null-.patch
-		git am ../patches/linux/6.12.85/crypto/0003-crypto-algif_aead-Revert-to-operating-out-of-place.patch
-		git am ../patches/linux/6.12.85/crypto/0004-crypto-algif_aead-snapshot-IV-for-async-AEAD-request.patch
-		git am ../patches/linux/6.12.85/crypto/0005-crypto-authenc-use-memcpy_sglist-instead-of-null-skc.patch
-		git am ../patches/linux/6.12.85/crypto/0006-crypto-authencesn-Do-not-place-hiseq-at-end-of-dst-f.patch
-		git am ../patches/linux/6.12.85/crypto/0007-crypto-authencesn-Fix-src-offset-when-decrypting-in-.patch
-		git am ../patches/linux/6.12.85/crypto/0008-crypto-af_alg-Fix-page-reassignment-overflow-in-af_a.patch
+		git am ../patches/linux/backports/6.12.85/b4-crypto/0001-sync-crypto-authencesn.c-with-v6.12.84.patch
+		git am ../patches/linux/backports/6.12.85/crypto/0001-crypto-scatterwalk-Backport-memcpy_sglist.patch
+		git am ../patches/linux/backports/6.12.85/crypto/0002-crypto-algif_aead-use-memcpy_sglist-instead-of-null-.patch
+		git am ../patches/linux/backports/6.12.85/crypto/0003-crypto-algif_aead-Revert-to-operating-out-of-place.patch
+		git am ../patches/linux/backports/6.12.85/crypto/0004-crypto-algif_aead-snapshot-IV-for-async-AEAD-request.patch
+		git am ../patches/linux/backports/6.12.85/crypto/0005-crypto-authenc-use-memcpy_sglist-instead-of-null-skc.patch
+		git am ../patches/linux/backports/6.12.85/crypto/0006-crypto-authencesn-Do-not-place-hiseq-at-end-of-dst-f.patch
+		git am ../patches/linux/backports/6.12.85/crypto/0007-crypto-authencesn-Fix-src-offset-when-decrypting-in-.patch
+		git am ../patches/linux/backports/6.12.85/crypto/0008-crypto-af_alg-Fix-page-reassignment-overflow-in-af_a.patch
 
-		git am ../patches/linux/6.12.87/0001-xfrm-esp-avoid-in-place-decrypt-on-shared-skb-frags.patch
+		git am ../patches/linux/backports/6.12.87/0001-xfrm-esp-avoid-in-place-decrypt-on-shared-skb-frags.patch
 
-		git am ../patches/linux/6.12.89/0001-ptrace-slightly-saner-get_dumpable-logic.patch
+		git am ../patches/linux/backports/6.12.89/0001-ptrace-slightly-saner-get_dumpable-logic.patch
 	fi
 	touch .patched
 fi
