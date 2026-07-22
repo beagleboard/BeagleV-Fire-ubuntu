@@ -54,40 +54,40 @@ build-v6.12-debian-13-riscv64:
       - "deploy/readme.md"
       - "deploy/image.yml.txt"
 
-build-v6.12-ubuntu-2404-riscv64:
-  image: robertcnelson/beagle-devscripts-kernel-ubuntu-24.04-amd64:latest
-  # https://openbeagle.org/beagleboard/ci-docker-images
-  cache:
-    key: "$CI_PROJECT_NAME-v6.12-ubuntu-2404-riscv64"
-    paths:
-      - mirror/x86_64-gcc-*-linux.tar.xz
-      - ccache.tar.zst
-  tags:
-    - docker-amd64
-  stage: build
-  script:
-    - ./tools/ci-setup-ccache.sh
-    - ./01_git_sync.sh
-    - ./02_build_hss.sh
-    - ./03_build_u-boot.sh
-    - ./04_build_linux.sh
-    - ./tools/ci-cleanup-ccache.sh
-    - ./05_generate_payload.bin.sh
-    - ./06_generate_ubuntu_console_root.sh
-    - ./07_create_sdcard_img.sh
-    - tree -s deploy/
-    - cp -v deploy/images/sdcard.img.xz ./deploy/
-    - cp -v deploy/images/sdcard.bmap ./deploy/
-    - cp -v deploy/images/image.yml.txt ./deploy/
-    - cp -v deploy/input/beaglev_fire.itb ./deploy/
-  artifacts:
-    when: on_success
-    expire_in: 2 week
-    name: "$CI_PROJECT_NAME-v6.12-ubuntu-2404-riscv64-$CI_JOB_ID"
-    paths:
-      - "deploy/*modules.tar.gz"
-      - "deploy/beaglev_fire.itb"
-      - "deploy/sdcard.img.xz"
-      - "deploy/sdcard.bmap"
-      - "deploy/readme.md"
-      - "deploy/image.yml.txt"
+#build-v6.12-ubuntu-2404-riscv64:
+#  image: robertcnelson/beagle-devscripts-kernel-ubuntu-24.04-amd64:latest
+#  # https://openbeagle.org/beagleboard/ci-docker-images
+#  cache:
+#    key: "$CI_PROJECT_NAME-v6.12-ubuntu-2404-riscv64"
+#    paths:
+#      - mirror/x86_64-gcc-*-linux.tar.xz
+#      - ccache.tar.zst
+#  tags:
+#    - docker-amd64
+#  stage: build
+#  script:
+#    - ./tools/ci-setup-ccache.sh
+#    - ./01_git_sync.sh
+#    - ./02_build_hss.sh
+#    - ./03_build_u-boot.sh
+#    - ./04_build_linux.sh
+#    - ./tools/ci-cleanup-ccache.sh
+#    - ./05_generate_payload.bin.sh
+#    - ./06_generate_ubuntu_console_root.sh
+#    - ./07_create_sdcard_img.sh
+#    - tree -s deploy/
+#    - cp -v deploy/images/sdcard.img.xz ./deploy/
+#    - cp -v deploy/images/sdcard.bmap ./deploy/
+#    - cp -v deploy/images/image.yml.txt ./deploy/
+#    - cp -v deploy/input/beaglev_fire.itb ./deploy/
+#  artifacts:
+#    when: on_success
+#    expire_in: 2 week
+#    name: "$CI_PROJECT_NAME-v6.12-ubuntu-2404-riscv64-$CI_JOB_ID"
+#    paths:
+#      - "deploy/*modules.tar.gz"
+#      - "deploy/beaglev_fire.itb"
+#      - "deploy/sdcard.img.xz"
+#      - "deploy/sdcard.bmap"
+#      - "deploy/readme.md"
+#      - "deploy/image.yml.txt"
