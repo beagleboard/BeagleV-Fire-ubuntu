@@ -8,11 +8,13 @@ variables:
 before_script:
   - export PATH=/usr/lib/ccache:$PATH
   - export CCACHE_DIR=/dev/shm/my-ccache-in-memory
+  - export DEBEMAIL="$GITLAB_USER_EMAIL"
+  - export DEBFULLNAME="$GITLAB_USER_NAME"
   - df -h /dev/shm
-  - touch .gitlab-runner
   - git config --global user.email "$GITLAB_USER_EMAIL"
   - git config --global user.name "$GITLAB_USER_NAME"
   - git config --global advice.detachedHead false
+  - touch .gitlab-runner
 
 build-v6.12-debian-13-riscv64:
   image: robertcnelson/beagle-devscripts-kernel-debian-13-amd64:latest
@@ -26,18 +28,12 @@ build-v6.12-debian-13-riscv64:
     - docker-amd64
   stage: build
   script:
-    - tar --zstd -xf ccache.tar.zst -C / || true
-    - df -h /dev/shm
-    - ccache -M 5G
-    - ccache -sv
-    - ccache -z
+    - ./tools/ci-setup-ccache.sh
     - ./01_git_sync.sh
     - ./02_build_hss.sh
     - ./03_build_u-boot.sh
     - ./04_build_linux.sh
-    - ccache -sv
-    - df -h /dev/shm
-    - tar --use-compress-program='zstd -6' -cf ccache.tar.zst /dev/shm/my-ccache-in-memory
+    - ./tools/ci-cleanup-ccache.sh
     - ./05_generate_payload.bin.sh
     - ./06_generate_debian_console_root.sh
     - ./07_create_sdcard_img.sh
@@ -70,18 +66,12 @@ build-v6.12-ubuntu-2404-riscv64:
     - docker-amd64
   stage: build
   script:
-    - tar --zstd -xf ccache.tar.zst -C / || true
-    - df -h /dev/shm
-    - ccache -M 5G
-    - ccache -sv
-    - ccache -z
+    - ./tools/ci-setup-ccache.sh
     - ./01_git_sync.sh
     - ./02_build_hss.sh
     - ./03_build_u-boot.sh
     - ./04_build_linux.sh
-    - ccache -sv
-    - df -h /dev/shm
-    - tar --use-compress-program='zstd -6' -cf ccache.tar.zst /dev/shm/my-ccache-in-memory
+    - ./tools/ci-cleanup-ccache.sh
     - ./05_generate_payload.bin.sh
     - ./06_generate_ubuntu_console_root.sh
     - ./07_create_sdcard_img.sh
