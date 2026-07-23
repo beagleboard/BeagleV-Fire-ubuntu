@@ -2,7 +2,12 @@
 
 CORES=$(getconf _NPROCESSORS_ONLN)
 wdir=`pwd`
-CC=${CC:-"${wdir}/riscv-toolchain/bin/riscv64-linux-"}
+
+if [ -f .ci-native-gcc ] ; then
+	CC=${CC:-"riscv64-linux-gnu-"}
+else
+	CC=${CC:-"${wdir}/riscv-toolchain/bin/riscv64-linux-"}
+fi
 
 cd ./linux/
 
@@ -34,7 +39,10 @@ echo "make ARCH=riscv CROSS_COMPILE=${CC} clean"
 make ARCH=riscv CROSS_COMPILE=${CC} clean
 
 if [ -f arch/riscv/configs/mpfs_defconfig ] ; then
+	echo "make ARCH=riscv CROSS_COMPILE=${CC} mpfs_defconfig"
 	make ARCH=riscv CROSS_COMPILE=${CC} mpfs_defconfig
+
+	echo "make ARCH=riscv CROSS_COMPILE=${CC} olddefconfig"
 	make ARCH=riscv CROSS_COMPILE=${CC} olddefconfig
 
 	### We use mpfs_defconfig as the base, keep track of Microchip config changes
@@ -171,6 +179,7 @@ if [ -f arch/riscv/configs/mpfs_defconfig ] ; then
 	./scripts/config --enable CONFIG_MEMTEST
 
 	### Config: Backup our custom linux/beaglev-fire_defconfig
+	echo "make ARCH=riscv CROSS_COMPILE=${CC} olddefconfig"
 	make ARCH=riscv CROSS_COMPILE=${CC} olddefconfig
 	cp -v .config ../patches/linux/beaglev-fire_defconfig
 fi
