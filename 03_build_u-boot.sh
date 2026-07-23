@@ -18,17 +18,23 @@ if [ ! -f ./.patched ] ; then
 	touch .patched
 fi
 
+echo "make ARCH=riscv CROSS_COMPILE=${CC} distclean"
 make ARCH=riscv CROSS_COMPILE=${CC} distclean
 
+echo "make ARCH=riscv CROSS_COMPILE=${CC} beaglev_fire_defconfig"
 make ARCH=riscv CROSS_COMPILE=${CC} beaglev_fire_defconfig
+
+#echo "make ARCH=riscv CROSS_COMPILE=${CC} menuconfig"
 #make ARCH=riscv CROSS_COMPILE=${CC} menuconfig
 
+echo "./scripts/config --disable CONFIG_TOOLS_MKEFICAPSULE"
 ./scripts/config --disable CONFIG_TOOLS_MKEFICAPSULE
 
+echo "make ARCH=riscv CROSS_COMPILE=${CC} olddefconfig"
 make ARCH=riscv CROSS_COMPILE=${CC} olddefconfig
 
 echo "make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} all"
-make ARCH=riscv CROSS_COMPILE=${CC} all
+make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} all
 
 cd ../
 
