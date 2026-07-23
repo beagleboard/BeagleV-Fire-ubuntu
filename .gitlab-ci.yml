@@ -4,7 +4,7 @@
 
 variables:
   TRANSFER_METER_FREQUENCY: "5s"
-  GITLAB_EDITION: "ee"
+  CI_USE_RISCV_BUILDER: "disabled"
 
 before_script:
   - export PATH=/usr/lib/ccache:$PATH
@@ -55,7 +55,7 @@ build-v6.12-debian-13-riscv64:
       - "deploy/readme.md"
       - "deploy/image.yml.txt"
   rules:
-    - if: '$GITLAB_EDITION == "ce"'
+    - if: '$CI_USE_RISCV_BUILDER == "disabled"'
       when: on_success
 
 build-debian-13-riscv64:
@@ -85,7 +85,7 @@ build-debian-13-riscv64:
     expire_in: 2 week
     name: "$CI_PROJECT_NAME-debian-13-riscv64-$CI_JOB_ID"
   rules:
-    - if: '$GITLAB_EDITION == "ee"'
+    - if: '$CI_USE_RISCV_BUILDER == "enable"'
       when: on_success
 
 #build-v6.12-ubuntu-2404-riscv64:
