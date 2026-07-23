@@ -68,7 +68,7 @@ build-debian-13-riscv64:
     - touch .ci-native-gcc
     - ./tools/ci-setup-ccache.sh
     - ./01_git_sync.sh
-#    - ./02_build_hss.sh
+    - ./02_build_hss.sh
 #    - ./03_build_u-boot.sh
 #    - ./04_build_linux.sh
     - ./tools/ci-cleanup-ccache.sh
