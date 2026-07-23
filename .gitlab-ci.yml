@@ -73,7 +73,7 @@ build-debian-13-riscv64:
     - ./tools/ci-setup-ccache.sh
     - ./01_git_sync.sh
     - ./02_build_hss.sh
-#    - ./03_build_u-boot.sh
+    - ./03_build_u-boot.sh
 #    - ./04_build_linux.sh
     - ./tools/ci-cleanup-ccache.sh
 #    - ./05_generate_payload.bin.sh

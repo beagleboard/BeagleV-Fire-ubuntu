@@ -2,7 +2,12 @@
 
 CORES=$(getconf _NPROCESSORS_ONLN)
 wdir=`pwd`
-CC=${CC:-"${wdir}/riscv-toolchain/bin/riscv64-linux-"}
+
+if [ -f .ci-native-gcc ] ; then
+	CC=${CC:-"riscv64-linux-gnu-"}
+else
+	CC=${CC:-"${wdir}/riscv-toolchain/bin/riscv64-linux-"}
+fi
 
 cd ./u-boot/
 
