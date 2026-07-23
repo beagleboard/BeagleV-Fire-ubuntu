@@ -188,13 +188,16 @@ fi
 #make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} menuconfig
 #exit 2
 
-echo "make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} DTC_FLAGS=\"-@\" Image modules dtbs"
-make -j${CORES} ARCH=riscv CROSS_COMPILE="ccache ${CC}" DTC_FLAGS="-@" Image modules dtbs
+echo "make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} DTC_FLAGS=\"-@\" Image"
+make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} DTC_FLAGS="-@" Image
 
 if [ ! -f ./arch/riscv/boot/Image ] ; then
 	echo "Build Failed"
 	exit 2
 fi
+
+echo "make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} DTC_FLAGS=\"-@\" Image modules dtbs"
+make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} DTC_FLAGS="-@" Image modules dtbs
 
 KERNEL_UTS=$(cat "${wdir}/linux/include/generated/utsrelease.h" | awk '{print $3}' | sed 's/\"//g' )
 
