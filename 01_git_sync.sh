@@ -6,11 +6,13 @@ GCC_VERSION="14.2.0"
 #HSS stay in sync with gatware fpga builds...
 HSS_BRANCH="v2025.07"
 HSS_REPO="https://github.com/polarfire-soc/hart-software-services.git"
+CI_HSS_REPO="https://forgejo.gfnd.rcn-ee.org:3000/Microchip/hart-software-services.git"
 
 #UBOOT_BRANCH="v2023.02-BeagleV-Fire"
 #UBOOT_REPO="https://openbeagle.org/beaglev-fire/beaglev-fire-u-boot.git"
 UBOOT_BRANCH="linux4microchip+fpga-2025.10"
 UBOOT_REPO="https://github.com/linux4microchip/u-boot-mchp.git"
+CI_UBOOT_REPO="https://forgejo.gfnd.rcn-ee.org:3000/Microchip/u-boot-mchp.git"
 
 DT_BRANCH="v6.12.x-Beagle"
 DT_REPO="https://github.com/beagleboard/BeagleBoard-DeviceTrees.git"
@@ -18,6 +20,7 @@ DT_REPO="https://github.com/beagleboard/BeagleBoard-DeviceTrees.git"
 
 LINUX_BRANCH="linux4microchip+fpga-2025.10"
 LINUX_REPO="https://github.com/linux4microchip/linux.git"
+CI_LINUX_REPO="https://forgejo.gfnd.rcn-ee.org:3000/Microchip/linux.git"
 #LINUX_REPO="https://openbeagle.org/beaglev-fire/beaglev-fire-linux.git"
 #LINUX_REPO="git@openbeagle.org:beaglev-fire/beaglev-fire-linux.git"
 
@@ -40,15 +43,27 @@ if [ -d ./hart-software-services/ ] ; then
 	rm -rf ./hart-software-services/ || true
 fi
 
-echo "git clone -b ${HSS_BRANCH} ${HSS_REPO} ./hart-software-services/ --depth=${GIT_DEPTH}"
-git clone -b ${HSS_BRANCH} ${HSS_REPO} ./hart-software-services/ --depth=${GIT_DEPTH}
+touch .gitlab-runner
+
+if [ -f .gitlab-runner ] ; then
+	echo "git clone -b ${HSS_BRANCH} ${CI_HSS_REPO} ./hart-software-services/ --depth=${GIT_DEPTH}"
+	git clone -b ${HSS_BRANCH} ${CI_HSS_REPO} ./hart-software-services/ --depth=${GIT_DEPTH}
+else
+	echo "git clone -b ${HSS_BRANCH} ${HSS_REPO} ./hart-software-services/ --depth=${GIT_DEPTH}"
+	git clone -b ${HSS_BRANCH} ${HSS_REPO} ./hart-software-services/ --depth=${GIT_DEPTH}
+fi
 
 if [ -d ./u-boot ] ; then
 	rm -rf ./u-boot || true
 fi
 
-echo "git clone -b ${UBOOT_BRANCH} ${UBOOT_REPO} ./u-boot/ --depth=${GIT_DEPTH}"
-git clone -b ${UBOOT_BRANCH} ${UBOOT_REPO} ./u-boot/ --depth=${GIT_DEPTH}
+if [ -f .gitlab-runner ] ; then
+	echo "git clone -b ${UBOOT_BRANCH} ${CI_UBOOT_REPO} ./u-boot/ --depth=${GIT_DEPTH}"
+	git clone -b ${UBOOT_BRANCH} ${CI_UBOOT_REPO} ./u-boot/ --depth=${GIT_DEPTH}
+else
+	echo "git clone -b ${UBOOT_BRANCH} ${UBOOT_REPO} ./u-boot/ --depth=${GIT_DEPTH}"
+	git clone -b ${UBOOT_BRANCH} ${UBOOT_REPO} ./u-boot/ --depth=${GIT_DEPTH}
+fi
 
 if [ -d ./device-tree ] ; then
 	rm -rf ./device-tree || true
@@ -61,17 +76,12 @@ if [ -d ./linux ] ; then
 	rm -rf ./linux || true
 fi
 
-echo "git clone -b ${LINUX_BRANCH} ${LINUX_REPO} ./linux/ --depth=${GIT_DEPTH}"
-git clone --reference-if-able ~/linux-src/ -b ${LINUX_BRANCH} ${LINUX_REPO} ./linux/ --depth=${GIT_DEPTH}
+if [ -f .gitlab-runner ] ; then
+	echo "git clone -b ${LINUX_BRANCH} ${CI_LINUX_REPO} ./linux/ --depth=${GIT_DEPTH}"
+	git clone --reference-if-able /opt/linux-src/ -b ${LINUX_BRANCH} ${CI_LINUX_REPO} ./linux/ --depth=${GIT_DEPTH}
+else
+	echo "git clone -b ${LINUX_BRANCH} ${LINUX_REPO} ./linux/ --depth=${GIT_DEPTH}"
+	git clone --reference-if-able ~/linux-src/ -b ${LINUX_BRANCH} ${LINUX_REPO} ./linux/ --depth=${GIT_DEPTH}
+fi
 
-#BUILDROOT_BRANCH="bvf"
-#BUILDROOT_REPO="https://openbeagle.org/beaglev-fire/buildroot-external-microchip.git"
-#
-#if [ -d ./buildroot ] ; then
-	#rm -rf ./buildroot || true
-#fi
-#
-#echo "git clone -b ${BUILDROOT_BRANCH} ${BUILDROOT_REPO} ./buildroot/ --depth=${GIT_DEPTH}"
-#git clone -b ${BUILDROOT_BRANCH} ${BUILDROOT_REPO} ./buildroot/ --depth=${GIT_DEPTH}
-
-#
+###
