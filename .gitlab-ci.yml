@@ -4,6 +4,7 @@
 
 variables:
   TRANSFER_METER_FREQUENCY: "5s"
+  GITLAB_EDITION: "ee"
 
 before_script:
   - export PATH=/usr/lib/ccache:$PATH
@@ -53,6 +54,9 @@ build-v6.12-debian-13-riscv64:
       - "deploy/sdcard.bmap"
       - "deploy/readme.md"
       - "deploy/image.yml.txt"
+  rules:
+    - if: '$GITLAB_EDITION == "ce"'
+      when: on_success
 
 build-debian-13-riscv64:
   image: robertcnelson/beagle-devscripts-kernel-debian-13-riscv64:latest
@@ -80,6 +84,9 @@ build-debian-13-riscv64:
     when: on_success
     expire_in: 2 week
     name: "$CI_PROJECT_NAME-debian-13-riscv64-$CI_JOB_ID"
+  rules:
+    - if: '$GITLAB_EDITION == "ee"'
+      when: on_success
 
 #build-v6.12-ubuntu-2404-riscv64:
 #  image: robertcnelson/beagle-devscripts-kernel-ubuntu-24.04-amd64:latest
