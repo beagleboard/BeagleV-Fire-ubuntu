@@ -19,7 +19,7 @@ LINUX_BRANCH="linux4microchip+fpga-2025.10"
 LINUX_REPO="https://github.com/linux4microchip/linux.git"
 CI_LINUX_REPO="https://forgejo.gfnd.rcn-ee.org:3000/Microchip/linux.git"
 
-if [ ! -f .ci-native-gcc ] ; then
+if [[ ! -f .ci-debian-gcc ]] ; then
 	if [ ! -f ./mirror/x86_64-gcc-${GCC_VERSION}-nolibc-riscv64-linux.tar.xz ] ; then
 		echo "wget -c --directory-prefix=./mirror/ https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/${GCC_VERSION}/x86_64-gcc-${GCC_VERSION}-nolibc-riscv64-linux.tar.xz"
 		wget -c --directory-prefix=./mirror/ https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/${GCC_VERSION}/x86_64-gcc-${GCC_VERSION}-nolibc-riscv64-linux.tar.xz

@@ -70,7 +70,7 @@ build-debian-13-riscv64:
     - docker-amd64
   stage: build
   script:
-    - touch .ci-native-gcc
+    - touch .ci-debian-gcc
     - ./tools/ci-setup-ccache.sh
     - ./01_git_sync.sh
     - ./02_build_hss.sh
