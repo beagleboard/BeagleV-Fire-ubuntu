@@ -34,7 +34,7 @@ if [ ! -f ./images/sdcard.img ]; then
 	exit 2
 fi
 
-if [[ -f .gitlab-runner ]] ; then
+if [[ -f ../.gitlab-runner ]] ; then
 	if [[ -f .datestamp ]] ; then
 		datestamp=$(< .datestamp)
 		image_name="beaglev-fire-debian-13-iot-v6.6-riscv64-${datestamp}-4gb"
