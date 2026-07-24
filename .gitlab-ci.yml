@@ -4,6 +4,7 @@
 
 variables:
   TRANSFER_METER_FREQUENCY: "5s"
+  CACHE_REQUEST_TIMEOUT: "20"
   CI_USE_RISCV_BUILDER: "disabled"
 
 before_script:
@@ -76,7 +77,7 @@ build-debian-13-riscv64:
     - ./03_build_u-boot.sh
     - ./04_build_linux.sh
     - ./tools/ci-cleanup-ccache.sh
-#    - ./05_generate_payload.bin.sh
+    - ./05_generate_payload.bin.sh
 #    - ./06_generate_debian_console_root.sh
 #    - ./07_create_sdcard_img.sh
     - tree -s deploy/
