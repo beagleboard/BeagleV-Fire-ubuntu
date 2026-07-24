@@ -79,12 +79,19 @@ build-debian-13-riscv64:
     - ./tools/ci-cleanup-ccache.sh
     - ./05_generate_payload.bin.sh
     - ./06_generate_debian_console_root.sh
-#    - ./07_create_sdcard_img.sh
+    - ./07_create_sdcard_img.sh
     - tree -s deploy/
   artifacts:
     when: on_success
     expire_in: 2 week
     name: "$CI_PROJECT_NAME-debian-13-riscv64-$CI_JOB_ID"
+    paths:
+      - "deploy/*modules.tar.gz"
+      - "deploy/beaglev_fire.itb"
+      - "deploy/*.img.xz"
+      - "deploy/*.bmap"
+      - "deploy/readme.md"
+      - "deploy/image.yml.txt"
   rules:
     - if: '$CI_USE_RISCV_BUILDER == "enable"'
       when: on_success
