@@ -4,7 +4,6 @@
 
 variables:
   TRANSFER_METER_FREQUENCY: "5s"
-  CACHE_REQUEST_TIMEOUT: "20"
   CI_USE_RISCV_BUILDER: "disabled"
 
 before_script:
@@ -60,14 +59,15 @@ build-v6.12-debian-13-riscv64:
       when: on_success
 
 build-debian-13-riscv64:
-  image: robertcnelson/beagle-devscripts-kernel-debian-13-riscv64:latest
+  image: robertcnelson/beagle-devscripts-kernel-debian-13-amd64:latest
+#  image: robertcnelson/beagle-devscripts-kernel-debian-13-riscv64:latest
   # https://openbeagle.org/beagleboard/ci-docker-images
   cache:
     key: "$CI_PROJECT_NAME-debian-13-riscv64"
     paths:
       - ccache.tar.zst
   tags:
-    - docker-riscv64
+    - docker-amd64
   stage: build
   script:
     - touch .ci-native-gcc
