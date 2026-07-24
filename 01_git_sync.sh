@@ -35,8 +35,6 @@ if [ -d ./hart-software-services/ ] ; then
 	rm -rf ./hart-software-services/ || true
 fi
 
-touch .gitlab-runner
-
 if [ -f .gitlab-runner ] ; then
 	echo "git clone -b ${HSS_BRANCH} ${CI_HSS_REPO} ./hart-software-services/ --depth=5"
 	git clone -b ${HSS_BRANCH} ${CI_HSS_REPO} ./hart-software-services/ --depth=5
