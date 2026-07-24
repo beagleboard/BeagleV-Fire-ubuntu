@@ -78,7 +78,7 @@ build-debian-13-riscv64:
     - ./04_build_linux.sh
     - ./tools/ci-cleanup-ccache.sh
     - ./05_generate_payload.bin.sh
-#    - ./06_generate_debian_console_root.sh
+    - ./06_generate_debian_console_root.sh
 #    - ./07_create_sdcard_img.sh
     - tree -s deploy/
   artifacts:
