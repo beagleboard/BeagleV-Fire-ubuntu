@@ -19,6 +19,7 @@ if [ -f /tmp/latest ] ; then
 	latest_rootfs=$(cat "/tmp/latest")
 	datestamp=$(cat "/tmp/latest" | awk -F 'riscv64-' '{print $2}' | awk -F '.' '{print $1}')
 	echo "${datestamp}"
+	echo "${datestamp}" > .datestamp
 
 	if [ ! -f ./deploy/${distro}-${version}-console-riscv64-${datestamp}/riscv64-rootfs-${distro}-${codename}.tar ] ; then
 		echo "wget [${datestamp}/${latest_rootfs}]"

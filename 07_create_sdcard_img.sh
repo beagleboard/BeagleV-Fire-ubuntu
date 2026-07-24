@@ -34,9 +34,13 @@ if [ ! -f ./images/sdcard.img ]; then
 	exit 2
 fi
 
-###Todo add generated name...
-if [ -f .gitlab-runner ] ; then
-	image_name="sdcard"
+if [[ -f .gitlab-runner ]] ; then
+	if [[ -f .datestamp ]] ; then
+		datestamp=$(< .datestamp)
+		image_name="beaglev-fire-debian-13-iot-v6.6-riscv64-${datestamp}-4gb"
+	else
+		image_name="sdcard"
+	fi
 else
 	image_name="sdcard"
 fi
@@ -48,8 +52,8 @@ extract_sha256=$(sha256sum ./images/${image_name}.img | awk '{print $1}')
 echo "  extract_sha256: ${extract_sha256}" >> ./images/image.yml.txt
 
 if [ -f /usr/bin/bmaptool ] ; then
-	if [ -f ./images/sdcard.bmap ] ; then
-		rm -rf ./images/sdcard.bmap || true
+	if [ -f ./images/${image_name}.bmap ] ; then
+		rm -rf ./images/${image_name}.bmap || true
 	fi
 	/usr/bin/bmaptool -d create -o ./images/${image_name}.bmap ./images/${image_name}.img
 fi

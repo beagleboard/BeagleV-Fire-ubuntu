@@ -81,13 +81,14 @@ build-debian-13-riscv64:
     - ./06_generate_debian_console_root.sh
     - ./07_create_sdcard_img.sh
     - tree -s deploy/
+    - cp -v deploy/images/*.img.xz ./deploy/
+    - cp -v deploy/images/*.bmap ./deploy/
+    - cp -v deploy/images/image.yml.txt ./deploy/
   artifacts:
     when: on_success
     expire_in: 2 week
     name: "$CI_PROJECT_NAME-debian-13-riscv64-$CI_JOB_ID"
     paths:
-      - "deploy/*modules.tar.gz"
-      - "deploy/beaglev_fire.itb"
       - "deploy/*.img.xz"
       - "deploy/*.bmap"
       - "deploy/readme.md"
