@@ -23,6 +23,7 @@ if [ -f ./images/sdcard.img.xz ] ; then
 	rm -rf ./images/sdcard.img.xz || true
 fi
 
+echo "genimage --config genimage.cfg"
 genimage --config genimage.cfg
 
 if [ -d ./tmp ] ; then
@@ -38,6 +39,7 @@ if [[ -f ../.gitlab-runner ]] ; then
 	if [[ -f .datestamp ]] ; then
 		datestamp=$(< .datestamp)
 		image_name="beaglev-fire-debian-13-iot-v6.6-riscv64-${datestamp}-4gb"
+		cp -v ./images/sdcard.img ./images/${image_name}.img
 	else
 		image_name="sdcard"
 	fi
@@ -55,9 +57,11 @@ if [ -f /usr/bin/bmaptool ] ; then
 	if [ -f ./images/${image_name}.bmap ] ; then
 		rm -rf ./images/${image_name}.bmap || true
 	fi
+	echo "bmaptool -d create -o ./images/${image_name}.bmap ./images/${image_name}.img"
 	/usr/bin/bmaptool -d create -o ./images/${image_name}.bmap ./images/${image_name}.img
 fi
 
+echo "xz -T0 -z ./images/${image_name}.img"
 xz -T0 -z ./images/${image_name}.img
 
 if [ ! -f ./images/${image_name}.img.xz ]; then
