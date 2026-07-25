@@ -88,8 +88,8 @@ echo "  image_download_sha256: ${image_download_sha256}" >> ./images/${image_nam
 
 echo "  release_date: '${TIME}'" >> ./images/${image_name}.img.xz.yml.txt
 echo "  init_format: sysconf" >> ./images/${image_name}.img.xz.yml.txt
-echo "    devices:" >> ./images/${image_name}.img.xz.yml.txt
-echo "      - beaglev-fire" >> ./images/${image_name}.img.xz.yml.txt
-echo "      - recommended" >> ./images/${image_name}.img.xz.yml.txt
+echo "  devices:" >> ./images/${image_name}.img.xz.yml.txt
+echo "    - beaglev-fire" >> ./images/${image_name}.img.xz.yml.txt
+echo "    - recommended" >> ./images/${image_name}.img.xz.yml.txt
 
 #
