@@ -38,7 +38,7 @@ fi
 if [[ -f ../.gitlab-runner ]] ; then
 	if [[ -f .datestamp ]] ; then
 		datestamp=$(< .datestamp)
-		image_name="beaglev-fire-debian-13-iot-v6.6-riscv64-${datestamp}-4gb"
+		image_name="beaglev-fire-debian-13-iot-v6.12-riscv64-${datestamp}-4gb"
 		cp -v ./images/sdcard.img ./images/${image_name}.img
 	else
 		image_name="sdcard"
