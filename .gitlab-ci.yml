@@ -39,9 +39,9 @@ build-v6.12-debian-13-riscv64:
     - ./06_generate_debian_console_root.sh
     - ./07_create_sdcard_img.sh
     - tree -s deploy/
-    - cp -v deploy/images/sdcard.img.xz ./deploy/
-    - cp -v deploy/images/sdcard.bmap ./deploy/
-    - cp -v deploy/images/image.yml.txt ./deploy/
+    - cp -v deploy/images/*.img.xz ./deploy/
+    - cp -v deploy/images/*.bmap ./deploy/
+    - cp -v deploy/images/*.img.xz.yml.txt ./deploy/
     - cp -v deploy/input/beaglev_fire.itb ./deploy/
   artifacts:
     when: on_success
@@ -50,10 +50,10 @@ build-v6.12-debian-13-riscv64:
     paths:
       - "deploy/*modules.tar.gz"
       - "deploy/beaglev_fire.itb"
-      - "deploy/sdcard.img.xz"
-      - "deploy/sdcard.bmap"
+      - "deploy/*.img.xz"
+      - "deploy/*.bmap"
+      - "deploy/*.img.xz.yml.txt"
       - "deploy/readme.md"
-      - "deploy/image.yml.txt"
   rules:
     - if: '$CI_USE_RISCV_BUILDER == "disabled"'
       when: on_success
@@ -83,7 +83,7 @@ build-debian-13-riscv64:
     - tree -s deploy/
     - cp -v deploy/images/*.img.xz ./deploy/
     - cp -v deploy/images/*.bmap ./deploy/
-    - cp -v deploy/images/image.yml.txt ./deploy/
+    - cp -v deploy/images/*.img.xz.yml.txt ./deploy/
   artifacts:
     when: on_success
     expire_in: 2 week
@@ -91,8 +91,8 @@ build-debian-13-riscv64:
     paths:
       - "deploy/*.img.xz"
       - "deploy/*.bmap"
+      - "deploy/*.img.xz.yml.txt"
       - "deploy/readme.md"
-      - "deploy/image.yml.txt"
   rules:
     - if: '$CI_USE_RISCV_BUILDER == "enable"'
       when: on_success
