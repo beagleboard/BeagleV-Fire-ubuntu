@@ -18,7 +18,7 @@ before_script:
   - touch .gitlab-runner
 
 build-v6.12-debian-13-riscv64:
-  image: robertcnelson/beagle-devscripts-kernel-debian-13-amd64:latest
+  image: registry.gfnd.rcn-ee.org:5000/ci/beagle-devscripts-kernel-debian-13-amd64:latest
   # https://openbeagle.org/beagleboard/ci-docker-images
   cache:
     key: "$CI_PROJECT_NAME-v6.12-debian-13-riscv64"
@@ -59,8 +59,8 @@ build-v6.12-debian-13-riscv64:
       when: on_success
 
 build-debian-13-riscv64:
-  image: robertcnelson/beagle-devscripts-kernel-debian-13-amd64:latest
-#  image: robertcnelson/beagle-devscripts-kernel-debian-13-riscv64:latest
+  image: registry.gfnd.rcn-ee.org:5000/ci/beagle-devscripts-kernel-debian-13-amd64:latest
+#  image: registry.gfnd.rcn-ee.org:5000/ci/beagle-devscripts-kernel-debian-13-riscv64:latest
   # https://openbeagle.org/beagleboard/ci-docker-images
   cache:
     key: "$CI_PROJECT_NAME-debian-13-riscv64"
