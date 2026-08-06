@@ -21,8 +21,8 @@ CI_LINUX_REPO="https://forgejo.gfnd.rcn-ee.org:3000/Microchip/linux.git"
 
 if [[ ! -f .ci-debian-gcc ]] ; then
 	if [ ! -f ./mirror/x86_64-gcc-${GCC_VERSION}-nolibc-riscv64-linux.tar.xz ] ; then
-		echo "wget -c --directory-prefix=./mirror/ https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/${GCC_VERSION}/x86_64-gcc-${GCC_VERSION}-nolibc-riscv64-linux.tar.xz"
-		wget -c --directory-prefix=./mirror/ https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/${GCC_VERSION}/x86_64-gcc-${GCC_VERSION}-nolibc-riscv64-linux.tar.xz
+		echo "wget -c --directory-prefix=./mirror/ https://rcn-ee.net/mirror/crosstool/${GCC_VERSION}/x86_64-gcc-${GCC_VERSION}-nolibc-riscv64-linux.tar.xz"
+		wget -c --directory-prefix=./mirror/ https://rcn-ee.net/mirror/crosstool/${GCC_VERSION}/x86_64-gcc-${GCC_VERSION}-nolibc-riscv64-linux.tar.xz
 	fi
 
 	if [ ! -f ./riscv-toolchain/bin/riscv64-linux-gcc-${GCC_VERSION} ] ; then
