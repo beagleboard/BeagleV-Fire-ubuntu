@@ -25,8 +25,8 @@ LINUX_REPO="https://github.com/linux4microchip/linux.git"
 #LINUX_REPO="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git"
 
 if [ ! -f ./mirror/x86_64-gcc-${GCC_VERSION}-nolibc-riscv64-linux.tar.xz ] ; then
-	echo "wget -c --directory-prefix=./mirror/ https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/${GCC_VERSION}/x86_64-gcc-${GCC_VERSION}-nolibc-riscv64-linux.tar.xz"
-	wget -c --directory-prefix=./mirror/ https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/${GCC_VERSION}/x86_64-gcc-${GCC_VERSION}-nolibc-riscv64-linux.tar.xz
+	echo "wget -c --directory-prefix=./mirror/ https://rcn-ee.net/mirror/crosstool/${GCC_VERSION}/x86_64-gcc-${GCC_VERSION}-nolibc-riscv64-linux.tar.xz"
+	wget -c --directory-prefix=./mirror/ https://rcn-ee.net/mirror/crosstool/${GCC_VERSION}/x86_64-gcc-${GCC_VERSION}-nolibc-riscv64-linux.tar.xz
 fi
 
 if [ ! -f ./riscv-toolchain/bin/riscv64-linux-gcc-${GCC_VERSION} ] ; then
@@ -61,15 +61,5 @@ fi
 
 echo "git clone -b ${LINUX_BRANCH} ${LINUX_REPO} ./linux/ --depth=${GIT_DEPTH}"
 git clone --reference-if-able ~/linux-src/ -b ${LINUX_BRANCH} ${LINUX_REPO} ./linux/ --depth=${GIT_DEPTH}
-
-#BUILDROOT_BRANCH="bvf"
-#BUILDROOT_REPO="https://openbeagle.org/beaglev-fire/buildroot-external-microchip.git"
-#
-#if [ -d ./buildroot ] ; then
-	#rm -rf ./buildroot || true
-#fi
-#
-#echo "git clone -b ${BUILDROOT_BRANCH} ${BUILDROOT_REPO} ./buildroot/ --depth=${GIT_DEPTH}"
-#git clone -b ${BUILDROOT_BRANCH} ${BUILDROOT_REPO} ./buildroot/ --depth=${GIT_DEPTH}
 
 #
