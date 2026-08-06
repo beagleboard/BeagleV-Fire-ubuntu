@@ -51,22 +51,6 @@ build-v6.12-debian-13-riscv64:
       - ccache.tar.zst
   script:
     - *build_sequence
-    - tree -s deploy/
-    - cp -v deploy/images/*.img.xz ./deploy/
-    - cp -v deploy/images/*.bmap ./deploy/
-    - cp -v deploy/images/*.img.xz.yml.txt ./deploy/
-    - cp -v deploy/input/beaglev_fire.itb ./deploy/
-  artifacts:
-    when: on_success
-    expire_in: 2 week
-    name: "$CI_PROJECT_NAME-v6.12-debian-13-riscv64-$CI_JOB_ID"
-    paths:
-      - "deploy/*modules.tar.gz"
-      - "deploy/beaglev_fire.itb"
-      - "deploy/*.img.xz"
-      - "deploy/*.bmap"
-      - "deploy/*.img.xz.yml.txt"
-      - "deploy/readme.md"
   rules:
     - if: '$CI_USE_RISCV_BUILDER == "disabled"'
       when: on_success
