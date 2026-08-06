@@ -18,6 +18,8 @@ variables:
   - ./04_build_linux.sh
   - ./tools/ci-cleanup-ccache.sh
   - ./05_generate_payload.bin.sh
+  - ./06_generate_debian_console_root.sh
+  - ./07_create_sdcard_img.sh
 
 before_script:
   - export PATH=/usr/lib/ccache:$PATH
@@ -45,61 +47,12 @@ build-v6.6-debian-13-riscv64:
   extends: .build_base
   image: $REGISTRY_BASE/beagle-devscripts-kernel-debian-13-amd64:latest
   cache:
-    key: "$CI_PROJECT_NAME-v6.6-debian-13-riscv64"
+    key: "$CI_PROJECT_NAME-$CI_COMMIT_BRANCH-debian-13-riscv64"
     paths:
       - mirror/x86_64-gcc-*-linux.tar.xz
       - ccache.tar.zst
   script:
     - *build_sequence
-    - ./06_generate_debian_console_root.sh
-    - ./07_create_sdcard_img.sh
-    - tree -s deploy/
-    - cp -v deploy/images/sdcard.img.xz ./deploy/
-    - cp -v deploy/images/sdcard.bmap ./deploy/
-    - cp -v deploy/images/image.yml.txt ./deploy/
-    - cp -v deploy/input/beaglev_fire.itb ./deploy/
-  artifacts:
-    when: on_success
-    expire_in: 2 week
-    name: "$CI_PROJECT_NAME-v6.6-debian-13-riscv64-$CI_JOB_ID"
-    paths:
-      - "deploy/*modules.tar.gz"
-      - "deploy/beaglev_fire.itb"
-      - "deploy/sdcard.img.xz"
-      - "deploy/sdcard.bmap"
-      - "deploy/readme.md"
-      - "deploy/image.yml.txt"
-  rules:
-    - if: '$CI_USE_RISCV_BUILDER == "disabled"'
-      when: on_success
-
-build-v6.6-ubuntu-2404-riscv64:
-  image: $REGISTRY_BASE/beagle-devscripts-kernel-ubuntu-24.04-amd64:latest
-  cache:
-    key: "$CI_PROJECT_NAME-v6.6-ubuntu-2404-riscv64"
-    paths:
-      - mirror/x86_64-gcc-*-linux.tar.xz
-      - ccache.tar.zst
-  script:
-    - *build_sequence
-    - ./06_generate_ubuntu_console_root.sh
-    - ./07_create_sdcard_img.sh
-    - tree -s deploy/
-    - cp -v deploy/images/sdcard.img.xz ./deploy/
-    - cp -v deploy/images/sdcard.bmap ./deploy/
-    - cp -v deploy/images/image.yml.txt ./deploy/
-    - cp -v deploy/input/beaglev_fire.itb ./deploy/
-  artifacts:
-    when: on_success
-    expire_in: 2 week
-    name: "$CI_PROJECT_NAME-v6.6-ubuntu-2404-riscv64-$CI_JOB_ID"
-    paths:
-      - "deploy/*modules.tar.gz"
-      - "deploy/beaglev_fire.itb"
-      - "deploy/sdcard.img.xz"
-      - "deploy/sdcard.bmap"
-      - "deploy/readme.md"
-      - "deploy/image.yml.txt"
   rules:
     - if: '$CI_USE_RISCV_BUILDER == "disabled"'
       when: on_success
@@ -109,14 +62,12 @@ build-debian-13-riscv64:
   image: $REGISTRY_BASE/beagle-devscripts-kernel-debian-13-amd64:latest
 #  image: $REGISTRY_BASE/beagle-devscripts-kernel-debian-13-riscv64:latest
   cache:
-    key: "$CI_PROJECT_NAME-debian-13-riscv64"
+    key: "$CI_PROJECT_NAME-$CI_COMMIT_BRANCH-debian-13-riscv64"
     paths:
       - ccache.tar.zst
   script:
     - touch .ci-debian-gcc
     - *build_sequence
-    - ./06_generate_debian_console_root.sh
-    - ./07_create_sdcard_img.sh
     - tree -s deploy/
     - cp -v deploy/images/*.img.xz ./deploy/
     - cp -v deploy/images/*.bmap ./deploy/
