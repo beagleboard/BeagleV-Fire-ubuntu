@@ -10,6 +10,17 @@ variables:
   REGISTRY_BASE: "registry.gfnd.rcn-ee.org:5000/ci"
   CI_USE_RISCV_BUILDER: "disabled"
 
+.build_sequence: &build_sequence
+  - ./tools/ci-setup-ccache.sh
+  - ./01_git_sync.sh
+  - ./02_build_hss.sh
+  - ./03_build_u-boot.sh
+  - ./04_build_linux.sh
+  - ./tools/ci-cleanup-ccache.sh
+  - ./05_generate_payload.bin.sh
+  - ./06_generate_debian_console_root.sh
+  - ./07_create_sdcard_img.sh
+
 before_script:
   - export PATH=/usr/lib/ccache:$PATH
   - export CCACHE_DIR=/dev/shm/my-ccache-in-memory
@@ -25,26 +36,21 @@ after_script:
   - du -sh $CI_PROJECT_DIR/*
 #  - rm -rf $CI_PROJECT_DIR/KERNEL/
 
+.build_base:
+  stage: build
+  tags:
+    - docker-amd64
+
 build-v6.12-debian-13-riscv64:
+  extends: .build_base
   image: $REGISTRY_BASE/beagle-devscripts-kernel-debian-13-amd64:latest
   cache:
     key: "$CI_PROJECT_NAME-v6.12-debian-13-riscv64"
     paths:
       - mirror/x86_64-gcc-*-linux.tar.xz
       - ccache.tar.zst
-  tags:
-    - docker-amd64
-  stage: build
   script:
-    - ./tools/ci-setup-ccache.sh
-    - ./01_git_sync.sh
-    - ./02_build_hss.sh
-    - ./03_build_u-boot.sh
-    - ./04_build_linux.sh
-    - ./tools/ci-cleanup-ccache.sh
-    - ./05_generate_payload.bin.sh
-    - ./06_generate_debian_console_root.sh
-    - ./07_create_sdcard_img.sh
+    - *build_sequence
     - tree -s deploy/
     - cp -v deploy/images/*.img.xz ./deploy/
     - cp -v deploy/images/*.bmap ./deploy/
@@ -66,26 +72,16 @@ build-v6.12-debian-13-riscv64:
       when: on_success
 
 build-debian-13-riscv64:
+  extends: .build_base
   image: $REGISTRY_BASE/beagle-devscripts-kernel-debian-13-amd64:latest
 #  image: $REGISTRY_BASE/beagle-devscripts-kernel-debian-13-riscv64:latest
   cache:
     key: "$CI_PROJECT_NAME-debian-13-riscv64"
     paths:
       - ccache.tar.zst
-  tags:
-    - docker-amd64
-  stage: build
   script:
     - touch .ci-debian-gcc
-    - ./tools/ci-setup-ccache.sh
-    - ./01_git_sync.sh
-    - ./02_build_hss.sh
-    - ./03_build_u-boot.sh
-    - ./04_build_linux.sh
-    - ./tools/ci-cleanup-ccache.sh
-    - ./05_generate_payload.bin.sh
-    - ./06_generate_debian_console_root.sh
-    - ./07_create_sdcard_img.sh
+    - *build_sequence
     - tree -s deploy/
     - cp -v deploy/images/*.img.xz ./deploy/
     - cp -v deploy/images/*.bmap ./deploy/
