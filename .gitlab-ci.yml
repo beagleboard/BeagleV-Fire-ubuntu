@@ -47,7 +47,7 @@ build-v6.12-debian-13-riscv64:
   extends: .build_base
   image: $REGISTRY_BASE/beagle-devscripts-kernel-debian-13-amd64:latest
   cache:
-    key: "$CI_PROJECT_NAME-v6.12-debian-13-riscv64"
+    key: "$CI_PROJECT_NAME-$CI_COMMIT_BRANCH-debian-13-riscv64"
     paths:
       - mirror/x86_64-gcc-*-linux.tar.xz
       - ccache.tar.zst
@@ -62,7 +62,7 @@ build-debian-13-riscv64:
   image: $REGISTRY_BASE/beagle-devscripts-kernel-debian-13-amd64:latest
 #  image: $REGISTRY_BASE/beagle-devscripts-kernel-debian-13-riscv64:latest
   cache:
-    key: "$CI_PROJECT_NAME-debian-13-riscv64"
+    key: "$CI_PROJECT_NAME-$CI_COMMIT_BRANCH-debian-13-riscv64"
     paths:
       - ccache.tar.zst
   script:
