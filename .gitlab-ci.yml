@@ -33,8 +33,10 @@ before_script:
   - touch .gitlab-runner
 
 after_script:
+  - rm -rf $CI_PROJECT_DIR/ignore/
+  - rm -rf $CI_PROJECT_DIR/linux/
+  - rm -rf $CI_PROJECT_DIR/u-boot/
   - du -sh $CI_PROJECT_DIR/*
-#  - rm -rf $CI_PROJECT_DIR/KERNEL/
 
 .build_base:
   stage: build
