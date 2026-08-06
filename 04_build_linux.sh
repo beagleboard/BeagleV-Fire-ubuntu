@@ -2,7 +2,12 @@
 
 CORES=$(getconf _NPROCESSORS_ONLN)
 wdir=`pwd`
-CC=${CC:-"${wdir}/riscv-toolchain/bin/riscv64-linux-"}
+
+if [[ -f .ci-debian-gcc ]] ; then
+	CC=${CC:-"riscv64-linux-gnu-"}
+else
+	CC=${CC:-"${wdir}/riscv-toolchain/bin/riscv64-linux-"}
+fi
 
 cd ./linux/
 
@@ -186,13 +191,16 @@ fi
 #make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} menuconfig
 #exit 2
 
-echo "make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} DTC_FLAGS=\"-@\" Image modules dtbs"
-make -j${CORES} ARCH=riscv CROSS_COMPILE="ccache ${CC}" DTC_FLAGS="-@" Image modules dtbs
+echo "make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} DTC_FLAGS=\"-@\" Image"
+make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} DTC_FLAGS="-@" Image
 
 if [ ! -f ./arch/riscv/boot/Image ] ; then
 	echo "Build Failed"
 	exit 2
 fi
+
+echo "make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} DTC_FLAGS=\"-@\" Image modules dtbs"
+make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} DTC_FLAGS="-@" Image modules dtbs
 
 KERNEL_UTS=$(cat "${wdir}/linux/include/generated/utsrelease.h" | awk '{print $3}' | sed 's/\"//g' )
 

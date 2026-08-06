@@ -2,7 +2,12 @@
 
 CORES=$(getconf _NPROCESSORS_ONLN)
 wdir=`pwd`
-CC=${CC:-"${wdir}/riscv-toolchain/bin/riscv64-linux-"}
+
+if [[ -f .ci-debian-gcc ]] ; then
+	CC=${CC:-"riscv64-linux-gnu-"}
+else
+	CC=${CC:-"${wdir}/riscv-toolchain/bin/riscv64-linux-"}
+fi
 
 cd ./u-boot/
 
@@ -15,15 +20,20 @@ if [ ! -f ./.patched ] ; then
 	touch .patched
 fi
 
+echo "make ARCH=riscv CROSS_COMPILE=${CC} distclean"
 make ARCH=riscv CROSS_COMPILE=${CC} distclean
 
+echo "make ARCH=riscv CROSS_COMPILE=${CC} beaglev_fire_defconfig"
 make ARCH=riscv CROSS_COMPILE=${CC} beaglev_fire_defconfig
+
+#echo "make ARCH=riscv CROSS_COMPILE=${CC} menuconfig"
 #make ARCH=riscv CROSS_COMPILE=${CC} menuconfig
 
+echo "make ARCH=riscv CROSS_COMPILE=${CC} olddefconfig"
 make ARCH=riscv CROSS_COMPILE=${CC} olddefconfig
 
 echo "make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} all"
-make ARCH=riscv CROSS_COMPILE=${CC} all
+make -j${CORES} ARCH=riscv CROSS_COMPILE=${CC} all
 
 cd ../
 
