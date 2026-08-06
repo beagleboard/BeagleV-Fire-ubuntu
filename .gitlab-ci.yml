@@ -8,6 +8,16 @@ variables:
   GIT_STRATEGY: "clone"
   GIT_DEPTH: 1
   REGISTRY_BASE: "registry.gfnd.rcn-ee.org:5000/ci"
+  CI_USE_RISCV_BUILDER: "disabled"
+
+.build_sequence: &build_sequence
+  - ./tools/ci-setup-ccache.sh
+  - ./01_git_sync.sh
+  - ./02_build_hss.sh
+  - ./03_build_u-boot.sh
+  - ./04_build_linux.sh
+  - ./tools/ci-cleanup-ccache.sh
+  - ./05_generate_payload.bin.sh
 
 before_script:
   - export PATH=/usr/lib/ccache:$PATH
@@ -20,24 +30,27 @@ before_script:
   - git config --global advice.detachedHead false
   - touch .gitlab-runner
 
+after_script:
+  - rm -rf $CI_PROJECT_DIR/ignore/
+  - rm -rf $CI_PROJECT_DIR/linux/
+  - rm -rf $CI_PROJECT_DIR/u-boot/
+  - du -sh $CI_PROJECT_DIR/*
+
+.build_base:
+  stage: build
+  tags:
+    - docker-amd64
+
 build-v6.6-debian-13-riscv64:
+  extends: .build_base
   image: $REGISTRY_BASE/beagle-devscripts-kernel-debian-13-amd64:latest
   cache:
     key: "$CI_PROJECT_NAME-v6.6-debian-13-riscv64"
     paths:
       - mirror/x86_64-gcc-*-linux.tar.xz
       - ccache.tar.zst
-  tags:
-    - docker-amd64
-  stage: build
   script:
-    - ./tools/ci-setup-ccache.sh
-    - ./01_git_sync.sh
-    - ./02_build_hss.sh
-    - ./03_build_u-boot.sh
-    - ./04_build_linux.sh
-    - ./tools/ci-cleanup-ccache.sh
-    - ./05_generate_payload.bin.sh
+    - *build_sequence
     - ./06_generate_debian_console_root.sh
     - ./07_create_sdcard_img.sh
     - tree -s deploy/
@@ -67,17 +80,8 @@ build-v6.6-ubuntu-2404-riscv64:
     paths:
       - mirror/x86_64-gcc-*-linux.tar.xz
       - ccache.tar.zst
-  tags:
-    - docker-amd64
-  stage: build
   script:
-    - ./tools/ci-setup-ccache.sh
-    - ./01_git_sync.sh
-    - ./02_build_hss.sh
-    - ./03_build_u-boot.sh
-    - ./04_build_linux.sh
-    - ./tools/ci-cleanup-ccache.sh
-    - ./05_generate_payload.bin.sh
+    - *build_sequence
     - ./06_generate_ubuntu_console_root.sh
     - ./07_create_sdcard_img.sh
     - tree -s deploy/
@@ -98,4 +102,34 @@ build-v6.6-ubuntu-2404-riscv64:
       - "deploy/image.yml.txt"
   rules:
     - if: '$CI_USE_RISCV_BUILDER == "disabled"'
+      when: on_success
+
+build-debian-13-riscv64:
+  extends: .build_base
+  image: $REGISTRY_BASE/beagle-devscripts-kernel-debian-13-amd64:latest
+#  image: $REGISTRY_BASE/beagle-devscripts-kernel-debian-13-riscv64:latest
+  cache:
+    key: "$CI_PROJECT_NAME-debian-13-riscv64"
+    paths:
+      - ccache.tar.zst
+  script:
+    - touch .ci-debian-gcc
+    - *build_sequence
+    - ./06_generate_debian_console_root.sh
+    - ./07_create_sdcard_img.sh
+    - tree -s deploy/
+    - cp -v deploy/images/*.img.xz ./deploy/
+    - cp -v deploy/images/*.bmap ./deploy/
+    - cp -v deploy/images/*.img.xz.yml.txt ./deploy/
+  artifacts:
+    when: on_success
+    expire_in: 2 week
+    name: "$CI_PROJECT_NAME-debian-13-riscv64-$CI_JOB_ID"
+    paths:
+      - "deploy/*.img.xz"
+      - "deploy/*.bmap"
+      - "deploy/*.img.xz.yml.txt"
+      - "deploy/readme.md"
+  rules:
+    - if: '$CI_USE_RISCV_BUILDER == "enable"'
       when: on_success
